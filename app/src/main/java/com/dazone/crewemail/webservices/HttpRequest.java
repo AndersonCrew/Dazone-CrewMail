@@ -301,6 +301,7 @@ public class HttpRequest {
         params.put("mobileModuleName", "Mail");
         params.put("mobileDeviceId", deviceId);
         params.put("mobileUUID", deviceId);
+        params.put("mobileDeviceName", android.os.Build.MODEL);
         params.put("mobileOSVersion", android.os.Build.VERSION.RELEASE);
         WebServiceManager webServiceManager = new WebServiceManager();
         webServiceManager.doJsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new WebServiceManager.RequestListener<String>() {

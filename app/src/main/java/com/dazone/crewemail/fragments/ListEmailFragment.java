@@ -176,7 +176,7 @@ public class ListEmailFragment extends BaseFragment implements BaseHTTPCallBack,
         if (Util.isNetworkAvailable() && !DaZoneApplication.getInstance().offlineMode) {
             ///TODO Uncomment when build
             new Handler().postDelayed(() -> {
-                MailListSync.Instance().sync();
+                //MailListSync.Instance().sync();
             }, 3000);
         }
     }
