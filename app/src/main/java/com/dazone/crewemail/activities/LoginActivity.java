@@ -205,35 +205,9 @@ public class LoginActivity extends BaseActivity implements OnCheckDevice, BaseHT
     }
 
     private void loginSuccess() {
-        String token = FirebaseInstanceId.getInstance().getToken();
-        HttpRequest.getInstance().checkLoginDeviceRestriction(token, new IDeviceRestriction() {
-            @Override
-            public void onSuccess() {
-                initWholeOrganizationV4();
-                final Handler handler = new Handler();
-                handler.postDelayed(() -> gotoMainScreen(), 500);
-            }
-
-            @Override
-            public void onError(ErrorData errorData) {
-                dismissProgressDialog();
-                UserData.getInstance().logout(getApplicationContext());
-                DataManager.Instance().clearData();
-                if(errorData != null && errorData.getMessage() != null) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                    builder.setTitle(R.string.app_name);
-                    builder.setMessage(errorData.getMessage());
-                    builder.setPositiveButton(R.string.yes, (dialog, which) -> {
-                        dialog.dismiss();
-                    });
-
-                    AlertDialog dialog = builder.create();
-                    dialog.setCancelable(false);
-                    dialog.show();
-                }
-            }
-        });
-
+        initWholeOrganizationV4();
+        final Handler handler = new Handler();
+        handler.postDelayed(() -> gotoMainScreen(), 500);
     }
 
     private void gotoMainScreen() {
