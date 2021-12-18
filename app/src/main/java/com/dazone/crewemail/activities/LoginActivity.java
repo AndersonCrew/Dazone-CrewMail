@@ -346,9 +346,9 @@ public class LoginActivity extends BaseActivity implements OnCheckDevice, BaseHT
         if (Util.checkStringValue(DaZoneApplication.getInstance().getPrefs().getAccessToken()) && !DaZoneApplication.getInstance().getPrefs().getBooleanValue(Statics.PREFS_KEY_SESSION_ERROR, false)) {
             if (Util.isNetworkAvailable())
                 HttpRequest.getInstance().checkLogin(DaZoneApplication.getInstance().getPrefs(), this);
-            else {
-                gotoMainScreen();
-            }
+//            else {
+//                gotoMainScreen();
+//            }
         } else {
             DaZoneApplication.getInstance().getPrefs().putBooleanValue(Statics.PREFS_KEY_SESSION_ERROR, false);
             findViewById(R.id.logo).setVisibility(View.GONE);

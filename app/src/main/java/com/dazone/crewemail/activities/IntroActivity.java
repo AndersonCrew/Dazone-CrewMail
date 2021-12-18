@@ -23,17 +23,20 @@ import android.widget.Toast;
 import com.dazone.crewemail.DaZoneApplication;
 import com.dazone.crewemail.R;
 import com.dazone.crewemail.activities.setting.PinActivity;
+import com.dazone.crewemail.data.ErrorData;
 import com.dazone.crewemail.data.PersonData;
 import com.dazone.crewemail.data.UserData;
 import com.dazone.crewemail.database.DataManager;
 import com.dazone.crewemail.database.OrganizationUserDBHelper;
 import com.dazone.crewemail.database.ServerSiteDBHelper;
 import com.dazone.crewemail.event.PinEvent;
+import com.dazone.crewemail.interfaces.IDeviceRestriction;
 import com.dazone.crewemail.utils.Constants;
 import com.dazone.crewemail.utils.Prefs;
 import com.dazone.crewemail.utils.Statics;
 import com.dazone.crewemail.utils.StaticsBundle;
 import com.dazone.crewemail.utils.Util;
+import com.dazone.crewemail.webservices.HttpRequest;
 import com.dazone.crewemail.webservices.WebClient;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -50,6 +53,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import com.dazone.crewemail.BuildConfig;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import static com.dazone.crewemail.utils.Util.compareVersionNames;
 import static com.dazone.crewemail.webservices.HttpRequest.sRootLink;
@@ -321,9 +325,34 @@ public class IntroActivity extends BaseActivity {
 
     private void loginSuccess(boolean mIsSuccess) {
         if (mIsSuccess) {
-            callActivity(ListEmailActivity.class);
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-            finish();
+            String token = FirebaseInstanceId.getInstance().getToken();
+            HttpRequest.getInstance().checkLoginDeviceRestriction(token, new IDeviceRestriction() {
+                @Override
+                public void onSuccess() {
+                    callActivity(ListEmailActivity.class);
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                    finish();
+                }
+
+                @Override
+                public void onError(ErrorData errorData) {
+                    dismissProgressDialog();
+                    UserData.getInstance().logout(getApplicationContext());
+                    DataManager.Instance().clearData();
+                    if(errorData != null && errorData.getMessage() != null) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(IntroActivity.this);
+                        builder.setTitle(R.string.app_name);
+                        builder.setMessage(errorData.getMessage());
+                        builder.setPositiveButton(R.string.yes, (dialog, which) -> {
+                            dialog.dismiss();
+                        });
+
+                        AlertDialog dialog = builder.create();
+                        dialog.setCancelable(false);
+                        dialog.show();
+                    }
+                }
+            });
         }
     }
 
