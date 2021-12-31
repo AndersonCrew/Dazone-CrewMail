@@ -1,5 +1,6 @@
 package com.dazone.crewemail.activities;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -9,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
@@ -204,8 +206,10 @@ public class LoginActivity extends BaseActivity implements OnCheckDevice, BaseHT
         }
     }
 
+    @SuppressLint("HardwareIds")
     private void loginSuccess() {
-        String token = FirebaseInstanceId.getInstance().getToken();
+         String token = Settings.Secure.getString(LoginActivity.this.getContentResolver(),
+                Settings.Secure.ANDROID_ID);
         HttpRequest.getInstance().checkLoginDeviceRestriction(token, new IDeviceRestriction() {
             @Override
             public void onSuccess() {
