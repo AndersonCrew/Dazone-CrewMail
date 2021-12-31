@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -325,7 +326,8 @@ public class IntroActivity extends BaseActivity {
 
     private void loginSuccess(boolean mIsSuccess) {
         if (mIsSuccess) {
-            String token = FirebaseInstanceId.getInstance().getToken();
+            String token = Settings.Secure.getString(IntroActivity.this.getContentResolver(),
+                    Settings.Secure.ANDROID_ID);
             HttpRequest.getInstance().checkLoginDeviceRestriction(token, new IDeviceRestriction() {
                 @Override
                 public void onSuccess() {
