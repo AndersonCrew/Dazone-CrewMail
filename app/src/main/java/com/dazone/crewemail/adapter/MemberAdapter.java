@@ -101,7 +101,18 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MemberView
         }
     }
 
-    interface IAllMemberChecked {
+    public ArrayList<PersonData> getSelectedList() {
+        ArrayList<PersonData> selected = new ArrayList<>();
+        for(PersonData personData : list) {
+            if(personData.isCheck() && !selected.contains(personData)) {
+                selected.add(personData);
+            }
+        }
+
+        return selected;
+    }
+
+    public interface IAllMemberChecked {
         void onAllMemberChecked();
         void onAllMemberNonChecked();
     }

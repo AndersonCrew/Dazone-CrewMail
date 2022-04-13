@@ -73,21 +73,23 @@ public class OrganizationActivity extends BaseActivity {
 
         imgDone.setOnClickListener(v -> {
 
+            ArrayList<PersonData> selected;
             if(adapter.getItem(vpOrganization.getCurrentItem()) instanceof CompanyFragmentRenew) {
-                ArrayList<PersonData> selected = new ArrayList<>(companyFragmentRenew.getAdapter().getListSelected());
-
-                Gson gson = new Gson();
-                Intent intent = new Intent();
-                intent.putExtra(StaticsBundle.BUNDLE_LIST_PERSON, gson.toJson(selected));
-
-
-                String arrayData = gson.toJson(companyFragmentRenew.getAdapter().getListData());
-                new Prefs().putStringValue(Constants.ORGANIZATION, arrayData);
-
-                setResult(Activity.RESULT_OK, intent);
-                finish();
-
+                selected = new ArrayList<>(companyFragmentRenew.getAdapter().getListSelected());
+            } else {
+                selected = new ArrayList<>(searchFragmentRenew.getAdapter().getSelectedList());
             }
+
+            Gson gson = new Gson();
+            Intent intent = new Intent();
+            intent.putExtra(StaticsBundle.BUNDLE_LIST_PERSON, gson.toJson(selected));
+
+
+            String arrayData = gson.toJson(companyFragmentRenew.getAdapter().getListData());
+            new Prefs().putStringValue(Constants.ORGANIZATION, arrayData);
+
+            setResult(Activity.RESULT_OK, intent);
+            finish();
         });
     }
 
