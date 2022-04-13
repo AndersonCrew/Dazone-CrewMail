@@ -783,15 +783,10 @@ public class FragmentMailCreate extends BaseFragment implements pushlishProgress
                 }
                 break;
             case R.id.menuMailCreateSend:
-                EventBus.getDefault().post(new CompleteTextView());
+                sendAction();
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Subscribe
-    public void sendMail(SendMailAction sendMailAction) {
-        sendAction();
     }
 
     public AlertDialog myDialog;
@@ -828,14 +823,7 @@ public class FragmentMailCreate extends BaseFragment implements pushlishProgress
                         normalAlertDialogV2(getActivity(), getString(R.string.app_name), getString(R.string.string_title_mail_create_error), getString(R.string.string_title_mail_create_ok), null);
                         isSend = true;
                     } else {
-                        PreferenceUtilities preferenceUtilities = DaZoneApplication.getInstance().getPreferenceUtilities();
-                        String mailTo = preferenceUtilities.getIsMail();
-                        int pos = mailTo.indexOf("@");
-                        String username = "mdt";
-                        if (pos != -1) {
-                            username = mailTo.substring(0, mailTo.indexOf("@"));
-                        }
-                        if (edtMailCreateTo.getObjects().size() == 0) {
+                         if (edtMailCreateTo.getObjects().size() == 0) {
                             ArrayList<PersonData> list = new ArrayList<>();
                             list.addAll(edtMailCreateBcc.getObjects());
                             list.addAll(edtMailCreateCc.getObjects());
