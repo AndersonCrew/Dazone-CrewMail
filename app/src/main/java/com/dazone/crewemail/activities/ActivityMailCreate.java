@@ -1,12 +1,21 @@
 package com.dazone.crewemail.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.dazone.crewemail.R;
 import com.dazone.crewemail.data.MailBoxData;
+import com.dazone.crewemail.data.PersonData;
 import com.dazone.crewemail.fragments.FragmentMailCreate;
+import com.dazone.crewemail.utils.Constants;
+import com.dazone.crewemail.utils.Prefs;
 import com.dazone.crewemail.utils.StaticsBundle;
 import com.dazone.crewemail.utils.Util;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 /**
  * Created by THANHTUNG on 16/12/2015.

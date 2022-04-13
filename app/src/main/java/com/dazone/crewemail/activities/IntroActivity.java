@@ -327,25 +327,6 @@ public class IntroActivity extends BaseActivity {
         }
     }
 
-    private class saveUserBgr extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            int serverSiteId = ServerSiteDBHelper.getServerSiteId(sRootLink);
-            OrganizationUserDBHelper.addTreeUser(personDatasRecycle, serverSiteId);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-        }
-    }
-
     private class WebClientAsync_Logout_v2 extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {

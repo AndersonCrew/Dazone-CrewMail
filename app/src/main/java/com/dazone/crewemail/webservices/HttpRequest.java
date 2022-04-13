@@ -654,172 +654,40 @@ public class HttpRequest {
         });
     }
 
-    /**
-     * GET ALL USERS WITH BELONGS
-     */
-    public void getAllUsersWithBeLongs(final OnGetAllOfUser callBack) {
-        String url = sRootLink + Urls.URL_GET_ALL_USER_WITH_BELONGS;
-        Map<String, String> params = new HashMap<>();
-        params.put("sessionId", "" + DaZoneApplication.getInstance().getPrefs().getaccesstoken());
-        params.put("languageCode", "" + Locale.getDefault().getLanguage().toUpperCase());
-        params.put("timeZoneOffset", TimeUtils.getTimezoneOffsetInMinutes() + "");
-
-        WebServiceManager webServiceManager = new WebServiceManager();
-        webServiceManager.doJsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new WebServiceManager.RequestListener<String>() {
-            @Override
-            public void onSuccess(String response) {
-                try {
-                    Type typeUserWithBelong = new TypeToken<List<PersonData>>() {
-                    }.getType();
-                    ArrayList<PersonData> userWithBelongDTOs = new Gson().fromJson(response, typeUserWithBelong);
-                    if (callBack != null) {
-                        callBack.onGetAllOfUserSuccess(userWithBelongDTOs);
-                    }
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(ErrorData error) {
-                if (callBack != null)
-                    callBack.onGetAllOfUserFail(error);
-            }
-        });
-    }
-
-    public synchronized void GetListOrganize(final OnGetAllOfUser callBack) {
-        String moddate = "";
-        Calendar calendar = Calendar.getInstance();
-        moddate = TimeUtils.showTimeWithoutTimeZone(calendar.getTimeInMillis(), Statics.yyyy_MM_dd_HH_mm_ss_SSS);
-        String url = sRootLink + Urls.URL_GET_ALL_USER_BE_LONGS;
-        Map<String, String> params = new HashMap<>();
-        params.put("sessionId", "" + DaZoneApplication.getInstance().getPrefs().getaccesstoken());
-        params.put("languageCode", Locale.getDefault().getLanguage().toUpperCase());
-        params.put("timeZoneOffset", TimeUtils.getTimezoneOffsetInMinutes());
-        params.put("moddate", moddate);
-        WebServiceManager webServiceManager = new WebServiceManager();
-        webServiceManager.doJsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new WebServiceManager.RequestListener<String>() {
-            @Override
-            public void onSuccess(String response) {
-                new ExportUserList(response, callBack).execute();
-            }
-
-            @Override
-            public void onFailure(ErrorData error) {
-
-            }
-        });
-    }
-
-    public void getDepartmentMod(String moddate, final CheckUpdateDepartmentListener callBack) {
-        String url = sRootLink + Urls.URL_GET_DEPARTMENT_MOD;
-        Map<String, String> params = new HashMap<>();
-        params.put("sessionId", DaZoneApplication.getInstance().getPrefs().getaccesstoken());
-        params.put("languageCode", Locale.getDefault().getLanguage().toUpperCase());
-        params.put("timeZoneOffset", TimeUtils.getTimezoneOffsetInMinutes() + "");
-        params.put("moddate", moddate);
-        WebServiceManager webServiceManager = new WebServiceManager();
-        webServiceManager.doJsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new WebServiceManager.RequestListener<String>() {
-            @Override
-            public void onSuccess(String response) {
-                Util.printLogs("getDepartmentMod" + response);
-                try {
-                    Type listType = new TypeToken<ArrayList<PersonData>>() {
-                    }.getType();
-                    ArrayList<PersonData> listUser = new Gson().fromJson(response, listType);
-                    getUserMod(listUser, moddate, callBack);
-                } catch (Exception e) {
-                    Log.d(">>>sss", "getDepartmentMod " + e.getMessage());
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(ErrorData error) {
-                Log.d(">>>sss", "getDepartmentMod fail ");
-            }
-        });
-    }
-
-    public void getUserMod(final ArrayList<PersonData> listDepartment, String moddate, final CheckUpdateDepartmentListener callBack) {
-        String url = sRootLink + Urls.URL_GET_USER_MOD;
-        Map<String, String> params = new HashMap<>();
-        params.put("sessionId", DaZoneApplication.getInstance().getPrefs().getAccessToken());
-        params.put("languageCode", Locale.getDefault().getLanguage().toUpperCase());
-        params.put("timeZoneOffset", TimeUtils.getTimezoneOffsetInMinutes() + "");
-        params.put("moddate", moddate);
-        WebServiceManager webServiceManager = new WebServiceManager();
-        webServiceManager.doJsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new WebServiceManager.RequestListener<String>() {
-            @Override
-            public void onSuccess(String response) {
-                Util.printLogs("getUserMod " + response);
-                try {
-                    Type listType = new TypeToken<ArrayList<PersonData>>() {
-                    }.getType();
-                    ArrayList<PersonData> listUser = new Gson().fromJson(response, listType);
-                    if (callBack != null) {
-                        callBack.onUpdated(listDepartment, listUser);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(ErrorData error) {
-                Log.d(TAG, "getUserMod fail");
-            }
-        });
-    }
-
-    public static class ExportUserList extends AsyncTask<String, String, ArrayList<PersonData>> {
-        String response;
-        OnGetAllOfUser callBack;
-
-        public ExportUserList(String response, OnGetAllOfUser callBack) {
-            this.response = response;
-            this.callBack = callBack;
-        }
-
-        @Override
-        protected ArrayList<PersonData> doInBackground(String... params) {
-            Log.e(TAG, "response:" + response);
-            Type listType = new TypeToken<ArrayList<PersonData>>() {
-            }.getType();
-            ArrayList<PersonData> listUser = new Gson().fromJson(response, listType);
-            return listUser;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<PersonData> list) {
-            super.onPostExecute(list);
-
-            Collections.sort(list, (r1, r2) -> {
-                if (r1.getPositionSortNo() > r2.getPositionSortNo()) {
-                    return 1;
-                } else if (r1.getPositionSortNo() == r2.getPositionSortNo()) {
-                    return 0;
-                } else {
-                    return -1;
-                }
-            });
-            int serverSiteId = ServerSiteDBHelper.getServerSiteId(sRootLink);
-            Log.d("listUser", +list.size() + "");
-            OrganizationUserDBHelper.addTreeUser(list, serverSiteId);
-            if (callBack != null)
-                callBack.onGetAllOfUserSuccess(list);
-        }
-    }
-
     public void getDepartment(final OnGetAllOfUser callBack) {
         String url = sRootLink + Urls.URL_GET_DEPARTMENT;
         Map<String, String> params = new HashMap<>();
         params.put("sessionId", DaZoneApplication.getInstance().getPrefs().getaccesstoken());
         params.put("languageCode", Locale.getDefault().getLanguage().toUpperCase());
         params.put("timeZoneOffset", TimeUtils.getTimezoneOffsetInMinutes() + "");
+        WebServiceManager webServiceManager = new WebServiceManager();
+        webServiceManager.doJsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new WebServiceManager.RequestListener<String>() {
+            @Override
+            public void onSuccess(String response) {
+                try {
+                    Type listType = new TypeToken<ArrayList<PersonData>>() {
+                    }.getType();
+                    ArrayList<PersonData> listUser = new Gson().fromJson(response, listType);
+                    if (callBack != null)
+                        callBack.onGetAllOfUserSuccess(listUser);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(ErrorData error) {
+            }
+        });
+    }
+
+    public void getUserByDepartment(int departNo, OnGetAllOfUser callBack) {
+        String url = sRootLink + Urls.URL_GET_USERS_BY_DEPARTMENT;
+        Map<String, String> params = new HashMap<>();
+        params.put("sessionId", DaZoneApplication.getInstance().getPrefs().getaccesstoken());
+        params.put("languageCode", Locale.getDefault().getLanguage().toUpperCase());
+        params.put("timeZoneOffset", TimeUtils.getTimezoneOffsetInMinutes() + "");
+        params.put("departNo", departNo + "");
         WebServiceManager webServiceManager = new WebServiceManager();
         webServiceManager.doJsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new WebServiceManager.RequestListener<String>() {
             @Override
@@ -858,47 +726,6 @@ public class HttpRequest {
                     ListContact listUser = new Gson().fromJson(response, listType);
                     if (callBack != null)
                         callBack.onGetOnGetContactSuccess(listUser);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(ErrorData error) {
-            }
-        });
-    }
-
-    public void getDepartmentV2(final OnGetAllOfUser callBack) {
-        Log.d(TAG, "getDepartmentV2");
-        String url = sRootLink + Urls.URL_GET_DEPARTMENT_MOD;
-        Map<String, String> params = new HashMap<>();
-        params.put("sessionId", DaZoneApplication.getInstance().getPrefs().getaccesstoken());
-        params.put("languageCode", Locale.getDefault().getLanguage().toUpperCase());
-        params.put("timeZoneOffset", TimeUtils.getTimezoneOffsetInMinutes() + "");
-        params.put("moddate", TimeUtils.getTimeStamp());
-        WebServiceManager webServiceManager = new WebServiceManager();
-        webServiceManager.doJsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new WebServiceManager.RequestListener<String>() {
-            @Override
-            public void onSuccess(String response) {
-                Log.e(TAG, "response:" + response);
-                try {
-                    Type listType = new TypeToken<ArrayList<PersonData>>() {
-                    }.getType();
-                    ArrayList<PersonData> listUser = new Gson().fromJson(response, listType);
-                    int serverSiteId = ServerSiteDBHelper.getServerSiteId(sRootLink);
-                    Collections.sort(listUser, (r1, r2) -> {
-                        if (r1.getSortNo() > r2.getSortNo()) {
-                            return 1;
-                        } else if (r1.getSortNo() == r2.getSortNo()) {
-                            return 0;
-                        } else {
-                            return -1;
-                        }
-                    });
-
-                    OrganizationUserDBHelper.addTreeUser(listUser, serverSiteId);
-                    GetListOrganize(callBack);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

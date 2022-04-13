@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import com.dazone.crewemail.DaZoneApplication;
 import com.dazone.crewemail.data.AccountData;
 import com.dazone.crewemail.data.MailBoxMenuData;
+import com.dazone.crewemail.data.PersonData;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -25,6 +26,7 @@ public class Prefs {
     private final String SYNC_MAIL_BOX = "sync_box_no";
     private final String MAIL_ACCOUNT_LIST = "mail_account_list";
     private final String MOD_DATE = "modify_date";
+    private final String LIST_ORGANIZATION = "LIST_ORGANIZATION";
 
     private final String MAIL_IST = "data_list";
     private SharedPreferences prefs;
@@ -80,6 +82,18 @@ public class Prefs {
         prefs.edit().putString(MAIL_MENU_LIST, menuListJson).apply();
     }
 
+    public void putListOrganization(ArrayList<PersonData> list) {
+        Gson gson = new Gson();
+        String arrayData = gson.toJson(list);
+        putStringValue(Constants.ORGANIZATION, arrayData);
+    }
+
+    public ArrayList<PersonData> getListOrganization() {
+        Gson gson = new Gson();
+        Type userListType = new TypeToken<ArrayList<PersonData>>(){}.getType();
+        return gson.fromJson(new Prefs().getStringValue(Constants.ORGANIZATION, ""), userListType);
+    }
+
     public void removeMenuData() {
         prefs.edit().remove(MAIL_MENU_LIST).apply();
     }
@@ -96,6 +110,10 @@ public class Prefs {
         prefs.edit().remove(LAST_SYNC).apply();
         prefs.edit().remove(SYNC_MAIL_BOX).apply();
         prefs.edit().remove(MAIL_ACCOUNT_LIST).apply();
+    }
+
+    public void removeOrganization() {
+        prefs.edit().remove(Constants.ORGANIZATION).apply();
     }
 
     public String getMenuListData() {

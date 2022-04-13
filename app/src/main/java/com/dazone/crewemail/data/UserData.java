@@ -96,6 +96,7 @@ public class UserData extends BaseObservable {
         DaZoneApplication.getInstance().getPrefs().removeUserData();
         DaZoneApplication.getInstance().getPrefs().removeMenuData();
         DaZoneApplication.getInstance().getPrefs().removeSetting();
+        DaZoneApplication.getInstance().getPrefs().removeOrganization();
         DaZoneApplication.getInstance().getPrefs().putLongValue(Statics.SAVE_BOX_NO_PREF, 0);
         MailListSync.Instance().stop();
         OrganizationUserDBHelper.clearData();

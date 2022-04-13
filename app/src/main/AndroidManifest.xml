@@ -160,10 +160,6 @@
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="com.dazone.crewemail.activities.NewOrganizationChart"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name="com.dazone.crewemail.activities.setting.PinActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppFullScreenTheme" />

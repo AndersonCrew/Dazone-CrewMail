@@ -60,6 +60,7 @@ import com.dazone.crewemail.dialog.DialogUtil;
 import com.dazone.crewemail.event.CompleteTextView;
 import com.dazone.crewemail.event.NewMailEvent;
 import com.dazone.crewemail.event.SendMailAction;
+import com.dazone.crewemail.utils.Constants;
 import com.dazone.crewemail.utils.MailHelper;
 import com.dazone.crewemail.interfaces.BaseHTTPCallBack;
 import com.dazone.crewemail.interfaces.OnGetAllOfUser;
@@ -68,11 +69,14 @@ import com.dazone.crewemail.interfaces.OnMailDetailCallBack;
 import com.dazone.crewemail.interfaces.pushlishProgressInterface;
 import com.dazone.crewemail.utils.EmailBoxStatics;
 import com.dazone.crewemail.utils.PreferenceUtilities;
+import com.dazone.crewemail.utils.Prefs;
 import com.dazone.crewemail.utils.Statics;
 import com.dazone.crewemail.utils.StaticsBundle;
 import com.dazone.crewemail.utils.Util;
 import com.dazone.crewemail.webservices.HttpRequest;
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.nononsenseapps.filepicker.FilePickerActivity;
 
 import org.greenrobot.eventbus.EventBus;
@@ -80,6 +84,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -144,7 +149,7 @@ public class FragmentMailCreate extends BaseFragment implements pushlishProgress
 
         EventBus.getDefault().register(this);
         try {
-            PersonData.getDepartmentAndUser(this);
+            //PersonData.getDepartmentAndUser(this);
             AccountData.getAllAccount(this);
             HttpRequest.getInstance().removeTempFile(null);
         } catch (Exception e) {
@@ -218,45 +223,45 @@ public class FragmentMailCreate extends BaseFragment implements pushlishProgress
                 progress_bar.setVisibility(View.VISIBLE);
                 if (bundle != null) {
                     final String[] emails = bundle.getStringArray(Intent.EXTRA_EMAIL);
-                    HttpRequest.getInstance().getDepartmentV2(new OnGetAllOfUser() {
-                        @Override
-                        public void onGetAllOfUserSuccess(ArrayList<PersonData> list) {
-                            progress_bar.setVisibility(View.GONE);
-                            if (list.size() >= 0) {
-                                if (emails != null && emails.length >= 1) {
-                                    for (int i = 0; i <= emails.length - 1; i++) {
-                                        if (getPersonDataWithQueryUserNo(emails[i], arrayList, list).size() >= 1) {
-                                            for (int j = 0; j <= getPersonDataWithQueryUserNo(emails[i], arrayList, list).size() - 1; j++) {
-                                                edtMailCreateTo.addObject(getPersonDataWithQueryUserNo(emails[i], arrayList, list).get(j));
-                                            }
-                                        } else {
-                                            PersonData P = new PersonData();
-                                            P.setEmail(emails[i]);
-                                            P.setFullName(emails[i]);
-                                            edtMailCreateTo.addObject(P);
-                                        }
-
-                                    }
-                                    progress_bar.setVisibility(View.GONE);
-                                    mailBoxData.getListPersonDataTo().addAll(edtMailCreateTo.getObjects());
-                                }
-                            } else {
-                                for (int i = 0; i < emails.length - 1; i++) {
-                                    PersonData P = new PersonData();
-                                    P.setEmail(emails[i]);
-                                    P.setFullName("a");
-                                    edtMailCreateTo.addObject(P);
-                                }
-                                mailBoxData.getListPersonData().addAll(edtMailCreateTo.getObjects());
-                            }
-                        }
-
-                        @Override
-                        public void onGetAllOfUserFail(ErrorData errorData) {
-                            progress_bar.setVisibility(View.GONE);
-                        }
-
-                    });
+//                    HttpRequest.getInstance().getDepartmentV2(new OnGetAllOfUser() {
+//                        @Override
+//                        public void onGetAllOfUserSuccess(ArrayList<PersonData> list) {
+//                            progress_bar.setVisibility(View.GONE);
+//                            if (list.size() >= 0) {
+//                                if (emails != null && emails.length >= 1) {
+//                                    for (int i = 0; i <= emails.length - 1; i++) {
+//                                        if (getPersonDataWithQueryUserNo(emails[i], arrayList, list).size() >= 1) {
+//                                            for (int j = 0; j <= getPersonDataWithQueryUserNo(emails[i], arrayList, list).size() - 1; j++) {
+//                                                edtMailCreateTo.addObject(getPersonDataWithQueryUserNo(emails[i], arrayList, list).get(j));
+//                                            }
+//                                        } else {
+//                                            PersonData P = new PersonData();
+//                                            P.setEmail(emails[i]);
+//                                            P.setFullName(emails[i]);
+//                                            edtMailCreateTo.addObject(P);
+//                                        }
+//
+//                                    }
+//                                    progress_bar.setVisibility(View.GONE);
+//                                    mailBoxData.getListPersonDataTo().addAll(edtMailCreateTo.getObjects());
+//                                }
+//                            } else {
+//                                for (int i = 0; i < emails.length - 1; i++) {
+//                                    PersonData P = new PersonData();
+//                                    P.setEmail(emails[i]);
+//                                    P.setFullName("a");
+//                                    edtMailCreateTo.addObject(P);
+//                                }
+//                                mailBoxData.getListPersonData().addAll(edtMailCreateTo.getObjects());
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onGetAllOfUserFail(ErrorData errorData) {
+//                            progress_bar.setVisibility(View.GONE);
+//                        }
+//
+//                    });
                 }
             }
             if (Intent.ACTION_SEND.equals(action) && type != null) {
@@ -541,36 +546,57 @@ public class FragmentMailCreate extends BaseFragment implements pushlishProgress
     public void handleSelectedOrganizationResult(int type, ArrayList<PersonData> resultList) {
         if (task != 0) {
             if (resultList != null && resultList.size() > 0) {
-                Set<PersonData> set = new LinkedHashSet<>(resultList);
-                ArrayList<PersonData> uniqueList = new ArrayList<>(set);
-                if (dataCreate != null) {
-                    PersonData data = new PersonData(dataCreate.getFromName(), dataCreate.getFromAddr());
-                    edtMailCreateTo.addObject(data);
-                } else {
-                    PersonData data = new PersonData(resultList.get(0).getFullName(), resultList.get(0).getEmail());
-                    edtMailCreateTo.addObject(data);
-                }
+
+
                 if (task != 1) {
-                    for (PersonData personData : uniqueList) {
-                        switch (type) {
-                            case Statics.ORGANIZATION_TO_ACTIVITY:
+
+                    switch (type) {
+                        case Statics.ORGANIZATION_TO_ACTIVITY:
+
+                            resultList.addAll(edtMailCreateTo.getObjects());
+                            Set<PersonData> set = new LinkedHashSet<>(resultList);
+                            ArrayList<PersonData> uniqueList = new ArrayList<>(set);
+
+                            for (PersonData personData : uniqueList) {
                                 personData.setTypeAddress(0);
                                 UserData userDto = UserData.getUserInformation();
                                 if (!personData.getEmail().equals(userDto.getmEmail())) {
                                     edtMailCreateTo.addObject(personData);
                                 }
-                                break;
-                            case Statics.ORGANIZATION_CC_ACTIVITY:
-                                personData.setTypeAddress(1);
-                                edtMailCreateCc.addObject(personData);
-                                break;
-                            case Statics.ORGANIZATION_BCC_ACTIVITY:
-                                personData.setTypeAddress(2);
-                                edtMailCreateBcc.addObject(personData);
-                                break;
-                        }
+                            }
 
+
+                            break;
+                        case Statics.ORGANIZATION_CC_ACTIVITY:
+
+                            resultList.addAll(edtMailCreateCc.getObjects());
+                            Set<PersonData> setCC = new LinkedHashSet<>(resultList);
+                            ArrayList<PersonData> uniqueListCC = new ArrayList<>(setCC);
+
+                            for (PersonData personData : uniqueListCC) {
+                                personData.setTypeAddress(1);
+                                UserData userDto = UserData.getUserInformation();
+                                if (!personData.getEmail().equals(userDto.getmEmail())) {
+                                    edtMailCreateCc.addObject(personData);
+                                }
+                            }
+                            break;
+                        case Statics.ORGANIZATION_BCC_ACTIVITY:
+                            resultList.addAll(edtMailCreateBcc.getObjects());
+                            Set<PersonData> setBBC = new LinkedHashSet<>(resultList);
+                            ArrayList<PersonData> uniqueListBBC = new ArrayList<>(setBBC);
+
+                            for (PersonData personData : uniqueListBBC) {
+                                personData.setTypeAddress(2);
+
+                                UserData userDto = UserData.getUserInformation();
+                                if (!personData.getEmail().equals(userDto.getmEmail())) {
+                                    edtMailCreateBcc.addObject(personData);
+                                }
+                            }
+                            break;
                     }
+
                 }
                 edtMailCreateTo.allowCollapse(false);
                 if (resultList.size() == 1) {
@@ -581,6 +607,12 @@ public class FragmentMailCreate extends BaseFragment implements pushlishProgress
             }
         }
         adapter.notifyDataSetChanged();
+    }
+
+    private void checkRemoveObject(ArrayList<PersonData> resultList) {
+        for(PersonData personData : edtMailCreateTo.getObjects()) {
+            edtMailCreateTo.removeObject(personData);
+        }
     }
 
     public void bindData(MailBoxData data) {
@@ -970,8 +1002,14 @@ public class FragmentMailCreate extends BaseFragment implements pushlishProgress
                     case Statics.ORGANIZATION_TO_ACTIVITY:
                     case Statics.ORGANIZATION_CC_ACTIVITY:
                     case Statics.ORGANIZATION_BCC_ACTIVITY:
-                        ArrayList<PersonData> resultList = data.getExtras().getParcelableArrayList(StaticsBundle.BUNDLE_LIST_PERSON);
-                        handleSelectedOrganizationResult(requestCode, resultList);
+
+                        Gson gson = new Gson();
+
+                        Type userListType = new TypeToken<ArrayList<PersonData>>(){}.getType();
+
+                        ArrayList<PersonData> listSelected = gson.fromJson(data.getExtras().getString(StaticsBundle.BUNDLE_LIST_PERSON), userListType);
+
+                        handleSelectedOrganizationResult(requestCode, listSelected);
                         break;
                 }
             }
@@ -997,17 +1035,14 @@ public class FragmentMailCreate extends BaseFragment implements pushlishProgress
         ArrayList<PersonData> selectedList = new ArrayList<>();
         switch (v.getId()) {
             case R.id.imgMailCreateOrgTo:
-                selectedList.addAll(edtMailCreateTo.getObjects());
-                startOrganizationActivity(selectedList, Statics.ORGANIZATION_TO_ACTIVITY);
+                startOrganizationActivity(new ArrayList<>(edtMailCreateTo.getObjects()), Statics.ORGANIZATION_TO_ACTIVITY);
                 break;
             case R.id.imgMailCreateOrgCc:
-                selectedList.addAll(edtMailCreateCc.getObjects());
-                startOrganizationActivity(selectedList, Statics.ORGANIZATION_CC_ACTIVITY);
+                startOrganizationActivity(new ArrayList<>(edtMailCreateCc.getObjects()), Statics.ORGANIZATION_CC_ACTIVITY);
                 break;
 
             case R.id.imgMailCreateOrgBcc:
-                selectedList.addAll(edtMailCreateBcc.getObjects());
-                startOrganizationActivity(selectedList, Statics.ORGANIZATION_BCC_ACTIVITY);
+                startOrganizationActivity(new ArrayList<>(edtMailCreateBcc.getObjects()), Statics.ORGANIZATION_BCC_ACTIVITY);
                 break;
             //add new function contact 231018
             case R.id.imgMailCreateContactTo:
@@ -1025,9 +1060,10 @@ public class FragmentMailCreate extends BaseFragment implements pushlishProgress
     private void startOrganizationActivity(ArrayList<PersonData> selectedList, int type) {
         Log.d(TAG, "startOrganizationActivity");
         Intent i = new Intent(getActivity(), OrganizationActivity.class);
-        i.putParcelableArrayListExtra(StaticsBundle.BUNDLE_LIST_PERSON, selectedList);
-        i.putExtra("TYPE", type);
-        startActivity(i);
+        Gson gson = new Gson();
+        String arrayData = gson.toJson(selectedList);
+        i.putExtra(Constants.SELECTED_LIST, arrayData);
+        startActivityForResult(i, type);
     }
 
     private void startContactActivity(ArrayList<PersonData> selectedList, int type) {

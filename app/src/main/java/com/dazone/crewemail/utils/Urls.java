@@ -55,6 +55,7 @@ public class Urls {
     public static final String URL_GET_ALL_USER_WITH_BELONGS = "/UI/WebService/WebServiceCenter.asmx/GetAllUsersWithBelongs";
     public static final String URL_GET_ALL_USER = "/UI/WebService/WebServiceCenter.asmx/GetAllOfUsers";
     public static final String URL_GET_DEPARTMENT = "/UI/WebService/WebServiceCenter.asmx/GetDepartments";
+    public static final String URL_GET_USERS_BY_DEPARTMENT = "/UI/WebService/WebServiceCenter.asmx/GetUsersByDepartment";
     public static final String URL_GET_CONTACT = "/ui/contacts/dataservice.asmx/Get_ContactsUserMobile";
     public static final String URL_GET_DEPARTMENT_MOD = "/UI/WebService/WebServiceCenter.asmx/GetDepartments_Mod";
     public static final String URL_GET_USER_MOD = "/UI/WebService/WebServiceCenter.asmx/GetAllUsersWithBelongs_Mod";

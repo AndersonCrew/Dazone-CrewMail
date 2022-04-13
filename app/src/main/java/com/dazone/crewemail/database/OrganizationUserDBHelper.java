@@ -63,6 +63,13 @@ public class OrganizationUserDBHelper {
         return getList(where, arg);
     }
 
+    public static ArrayList<PersonData> getDepartments2(String serverLink) {
+        int serverSiteId = ServerSiteDBHelper.getServerSiteId(serverLink);
+        String where = SERVER_SITE_ID + " = ?";
+        String arg[] = new String[]{serverSiteId + ""};
+        return getList(null, null);
+    }
+
     public static ArrayList<PersonData> getDepartmentUsers(String serverLink) {
         int serverSiteId = ServerSiteDBHelper.getServerSiteId(serverLink);
         String where = ORGANIZATION_TYPE + " = 2 AND " + SERVER_SITE_ID + " = ?";
@@ -95,18 +102,6 @@ public class OrganizationUserDBHelper {
         return arrayList;
     }
 
-    public static synchronized boolean updateItem(PersonData dto, int id, int serverSiteId) {
-        try {
-            ContentResolver resolver = DaZoneApplication.getInstance()
-                    .getApplicationContext().getContentResolver();
-            resolver.update(AppContentProvider.GET_SERVER_ORGANIZATION_USER_URI, addvalue(dto, serverSiteId), ID + "=?", new String[]{id + ""});
-            return true;
-        } catch (Exception e) {
-            if (BuildConfig.DEBUG)
-                e.printStackTrace();
-        }
-        return false;
-    }
 
     public static boolean insertItem(PersonData dto, int serverSiteId) {
         try {
@@ -121,69 +116,13 @@ public class OrganizationUserDBHelper {
         return false;
     }
 
-    public static long bulkInsertEntries(List<PersonData> readings, int serverSiteId) {
-        // insert only if data is set correctly
-        SQLiteDatabase sqlDB = AppContentProvider.mDatabaseHelper.getWritableDatabase();
-        sqlDB.beginTransaction();
-        if (readings.size() == 0)
-            return 0;
-
-        long insertCount = 0;
-        try {
-            // insert new entries
-
-            // ArrayList<ContentValues> valueList = new ArrayList<ContentValues>();
-            ContentValues[] valueList = new ContentValues[readings.size()];
-            int i = 0;
-            for (PersonData dto : readings) {
-                ContentValues values = new ContentValues();
-                values.put(SERVER_SITE_ID, serverSiteId);
-                values.put(ORGANIZATION_USER_NO, dto.getUserNo());
-                values.put(ORGANIZATION_NAME, dto.getFullName());
-                values.put(ORGANIZATION_NAME_EN, dto.getNameEn());
-                values.put(ORGANIZATION_NAME_DEFAULT, dto.getNameDefault());
-                values.put(ORGANIZATION_EMAIL, dto.getmEmail());
-                values.put(ORGANIZATION_AVATAR, dto.getUrlAvatar());
-                values.put(ORGANIZATION_DEPART_NO, dto.getDepartNo());
-                values.put(ORGANIZATION_POSITION_NAME, dto.getPositionName());
-                values.put(ORGANIZATION_TYPE, dto.getType());
-                values.put(ORGANIZATION_ENABLE, (dto.isEnabled()) ? 1 : 0);
-                values.put(ORGANIZATION_SORT_NO, dto.getSortNo());
-                values.put(ORGANIZATION_DEPART_PARENT_NO, dto.getDepartmentParentNo());
-
-                // ...
-                valueList[i++] = values;
-
-            }
-            insertCount = DaZoneApplication.getInstance()
-                    .getApplicationContext().getContentResolver()
-                    .bulkInsert(AppContentProvider.GET_SERVER_ORGANIZATION_USER_URI, valueList);
-            // returns ID
-
-           /* ContentResolver resolver = DaZoneApplication.getInstance()
-                    .getApplicationContext().getContentResolver();
-            resolver.bulkInsert(AppContentProvider.GET_SERVER_ORGANIZATION_USER_URI, valueList);*/
-            sqlDB.setTransactionSuccessful();
-
-        } catch (Exception e) {
-            // Your error handling
-        } finally {
-            sqlDB.endTransaction();
-        }
-        return insertCount;
-    }
-
     public static synchronized void addTreeUser(List<PersonData> dtos, int serverSiteId) {
         if (dtos != null && dtos.size() != 0) {
             for (PersonData dto : dtos) {
                 insertItem(dto, serverSiteId);
-                if (dto.getPersonList() != null && dto.getPersonList().size() > 0) {
-                    addTreeUser(dto.getPersonList(), serverSiteId);
-                }
             }
         }
     }
-
 
     private static synchronized ContentValues addvalue(PersonData dto, int serverSiteId) {
         ContentValues values = new ContentValues();
@@ -220,35 +159,6 @@ public class OrganizationUserDBHelper {
         data.setDepartmentParentNo(cursor.getInt(cursor.getColumnIndex(ORGANIZATION_DEPART_PARENT_NO)));
 
         return data;
-    }
-
-    private static synchronized int hasData(PersonData person, int serverSiteId) {
-        String[] columns = new String[]{ID};
-        String where  /* ORGANIZATION_USER_NO + " = ? AND " + SERVER_SITE_ID + " = ? AND " + ORGANIZATION_TYPE + " = 2"*/;
-        String arg[] = new String[]{person.getUserNo() + "", serverSiteId + ""};
-        if (person.getType() == 1) { // category
-            where = ORGANIZATION_DEPART_NO + " = ? AND " + SERVER_SITE_ID + " = ? AND " + ORGANIZATION_TYPE + " = 1";
-            arg[0] = person.getDepartNo() + "";
-
-            ContentResolver resolver = DaZoneApplication.getInstance()
-                    .getApplicationContext().getContentResolver();
-            Cursor cursor = resolver.query(
-                    AppContentProvider.GET_SERVER_ORGANIZATION_USER_URI, columns, where,
-                    arg, null);
-            if (cursor != null) {
-                if (cursor.getCount() > 0) {
-                    try {
-                        if (cursor.moveToFirst()) {
-                            return cursor.getInt(cursor.getColumnIndex(ID));
-                        }
-                    } finally {
-                        cursor.close();
-                    }
-                }
-            }
-        }
-        return 0;
-
     }
 
     public static boolean clearData() {

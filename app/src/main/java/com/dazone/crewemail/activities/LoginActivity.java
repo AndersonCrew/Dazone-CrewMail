@@ -205,7 +205,7 @@ public class LoginActivity extends BaseActivity implements OnCheckDevice, BaseHT
     }
 
     private void loginSuccess() {
-        initWholeOrganizationV4();
+        OrganizationUserDBHelper.clearData();
         final Handler handler = new Handler();
         handler.postDelayed(() -> gotoMainScreen(), 500);
     }
@@ -216,104 +216,6 @@ public class LoginActivity extends BaseActivity implements OnCheckDevice, BaseHT
         startActivity(i);
         finish();
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-    }
-
-    public void initWholeOrganizationV4() {
-        OrganizationUserDBHelper.clearData();
-        List<PersonData> data;
-        data = Util.getFromSharedPrefs(this);
-        if (data == null) {
-            HttpRequest.getInstance().getDepartment(new OnGetAllOfUser() {
-                @Override
-                public void onGetAllOfUserSuccess(ArrayList<PersonData> departments) {
-                    personDatasRecycle.clear();
-                    personDatasRecycle.addAll(departments);
-                    HttpRequest.getInstance().getAllUsersWithBeLongs(new OnGetAllOfUser() {
-                        @Override
-                        public void onGetAllOfUserSuccess(ArrayList<PersonData> persons) {
-                            personDatasRecycle.addAll(persons);
-                            Collections.sort(personDatasRecycle, (r1, r2) -> {
-                                if (r1.getSortNo() > r2.getSortNo()) {
-                                    return 1;
-                                } else if (r1.getSortNo() == r2.getSortNo()) {
-                                    return 0;
-                                } else {
-                                    return -1;
-                                }
-                            });
-
-                            putUserToDepartment(departments, persons);
-                            Util.sortUserAndDepartment(departments);
-                            Util.saveToSharedPrefs(getApplicationContext(), departments);
-                            new saveUserBgr().execute();
-
-                        }
-
-                        @Override
-                        public void onGetAllOfUserFail(ErrorData errorData) {
-
-                        }
-                    });
-                }
-
-                @Override
-                public void onGetAllOfUserFail(ErrorData errorData) {
-
-                }
-            });
-        }
-    }
-
-    private class saveUserBgr extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            int serverSiteId = ServerSiteDBHelper.getServerSiteId(sRootLink);
-            OrganizationUserDBHelper.addTreeUser(personDatasRecycle, serverSiteId);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-        }
-    }
-
-    private void putUserToDepartment(ArrayList<PersonData> departs, ArrayList<PersonData> users) {
-        for (PersonData depart : departs) {
-            if (depart.getPersonList() != null && depart.getPersonList().size() > 0) {
-                putUserToDepartment(depart.getPersonList(), users);
-
-            }
-            ArrayList<PersonData> members = findUserInDepartment(depart.getDepartNo(), users);
-            depart.addChildren(members);
-        }
-    }
-
-    private ArrayList<PersonData> findUserInDepartment(int departNo, ArrayList<PersonData> users) {
-        ArrayList<PersonData> couldRemoved = new ArrayList<>();
-        ArrayList<PersonData> members = new ArrayList<>();
-        try {
-            for (PersonData user : users) {
-                ArrayList<ob_belongs> belongs = user.getBelongsArrayList();
-                if (belongs != null && belongs.size() > 0) {
-                    for (ob_belongs depart : belongs) {
-                        if (depart.getDepartNo() == departNo) {
-                            members.add(user);
-                            if (belongs.size() == 1) {
-                                couldRemoved.add(user);
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-        }
-        return members;
     }
 
     private void doLogin() {
