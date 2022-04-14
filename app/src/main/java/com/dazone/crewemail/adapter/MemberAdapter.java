@@ -7,6 +7,9 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.dazone.crewemail.DaZoneApplication;
 import com.dazone.crewemail.R;
 import com.dazone.crewemail.data.PersonData;
@@ -56,8 +59,12 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MemberView
         }
 
         void bindData(PersonData personData) {
-            Picasso.with(itemView.getContext())
+            RequestOptions requestOptions = new RequestOptions();
+            requestOptions.diskCacheStrategy(DiskCacheStrategy.ALL);
+
+            Glide.with(itemView.getContext())
                     .load(DaZoneApplication.getInstance().getPrefs().getServerSite() + personData.getUrlAvatar())
+                    .apply(requestOptions)
                     .into(imgAvatar);
 
             tvName.setText(personData.getFullName());

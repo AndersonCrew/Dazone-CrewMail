@@ -620,6 +620,7 @@ public abstract class TokenCompleteTextView<T> extends MultiAutoCompleteTextView
     @Override
     public void performCompletion() {
         isPerform = new Prefs().getBooleanValue(StaticsBundle.IS_DONE, false);
+        getViewForObject(defaultObject(currentCompletionText()));
         if (!isPerform) {
             new Prefs().putBooleanValue(StaticsBundle.IS_DONE, true);
             if ((getAdapter() == null || getListSelection() == ListView.INVALID_POSITION) && enoughToFilter()) {

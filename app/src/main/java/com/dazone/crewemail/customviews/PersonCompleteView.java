@@ -80,12 +80,13 @@ public class PersonCompleteView extends TokenCompleteTextView<PersonData> {
             txtContent.setTextColor(getResources().getColor(R.color.black));
             imgError.setVisibility(GONE);
             if (object.getTypeColor() == 1) {
-                tokenMailCreateItem.setBackgroundResource(R.drawable.color_background_mail_to);
                 if (TextUtils.isEmpty(email)) {
                     data = object.getFullName();
                 } else {
                     data = object.getFullName() + "<" + email + ">";
                 }
+
+                tokenMailCreateItem.setBackgroundResource(R.drawable.color_background_mail_to);
             } else if (TextUtils.isEmpty(email)) {
                 if (TextUtils.isEmpty(object.getFullName())) {
                     tokenMailCreateItem.setBackgroundResource(R.drawable.color_background_mail_bcc_cc);

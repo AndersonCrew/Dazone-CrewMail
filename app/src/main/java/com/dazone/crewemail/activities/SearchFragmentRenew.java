@@ -1,11 +1,20 @@
 package com.dazone.crewemail.activities;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.dazone.crewemail.R;
 import com.dazone.crewemail.adapter.MemberAdapter;
@@ -25,10 +34,14 @@ public class SearchFragmentRenew extends Fragment {
     private RecyclerView rvMembers;
     private MemberAdapter adapter;
     private ArrayList<PersonData> listMember;
+    private ImageView imgSearch;
+    private EditText etSearch;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_search_renew, container, false);
         rvMembers = v.findViewById(R.id.rvMembers);
+        imgSearch = v.findViewById(R.id.imgSearch);
+        etSearch = v.findViewById(R.id.etSearch);
         getData();
         return v;
     }
@@ -56,20 +69,99 @@ public class SearchFragmentRenew extends Fragment {
                 }
             }
 
-            adapter = new MemberAdapter(listMember, new MemberAdapter.IAllMemberChecked() {
-                @Override
-                public void onAllMemberChecked() {
+            initRecyclerView(listMember);
 
-                }
-
-                @Override
-                public void onAllMemberNonChecked() {
-
+            imgSearch.setOnClickListener(v -> {
+                if(!etSearch.getText().toString().isEmpty()) {
+                    actionSearch();
                 }
             });
 
-            rvMembers.setAdapter(adapter);
+            etSearch.setOnEditorActionListener((v, actionId, event) -> {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    if(!etSearch.getText().toString().isEmpty()) {
+                        actionSearch();
+                    }
+                    return true;
+                }
+                return false;
+            });
+
+            etSearch.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if(etSearch.getText().toString().isEmpty()) {
+                        bindSearchToList();
+                    }
+                }
+            });
         }
+    }
+
+    private void bindSearchToList() {
+        if(listSearch.size() > 0) {
+            for(PersonData personData : listSearch) {
+                if(personData.isCheck()) {
+                    checkList(personData, listMember);
+                }
+            }
+        }
+
+        initRecyclerView(listMember);
+    }
+
+    private void hideKeyBoard() {
+        InputMethodManager imm =(InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(etSearch.getWindowToken(), 0);
+    }
+
+    private void checkList(PersonData personData, ArrayList<PersonData> list) {
+        for(PersonData person : list) {
+            if(person.getUserNo() == personData.getUserNo()) {
+                person.setIsCheck(true);
+                return;
+            }
+        }
+    }
+
+    private void initRecyclerView(ArrayList<PersonData> listMember) {
+        adapter = new MemberAdapter(listMember, new MemberAdapter.IAllMemberChecked() {
+            @Override
+            public void onAllMemberChecked() {
+
+            }
+
+            @Override
+            public void onAllMemberNonChecked() {
+
+            }
+        });
+
+        rvMembers.setAdapter(adapter);
+    }
+
+    private ArrayList<PersonData> listSearch = new ArrayList<>();
+    private void actionSearch() {
+        hideKeyBoard();
+        listSearch = new ArrayList<>();
+        String keyword = etSearch.getText().toString().toLowerCase();
+        for(PersonData personData : listMember) {
+            if(personData.getFullName().toLowerCase().contains(keyword)) {
+                listSearch.add(personData);
+            }
+        }
+
+        initRecyclerView(listSearch);
     }
 
     private void checkDepartment(ArrayList<PersonData> listMember, ArrayList<PersonData> listDepartment) {
@@ -89,6 +181,7 @@ public class SearchFragmentRenew extends Fragment {
     }
 
     public MemberAdapter getAdapter() {
+        bindSearchToList();
         return adapter;
     }
 
