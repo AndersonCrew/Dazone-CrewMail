@@ -294,8 +294,37 @@ public class FragmentMailCreate extends BaseFragment implements pushlishProgress
                 }
             });
         } else {
-            people = new ArrayList<>(data);
+            people = new ArrayList<>();
+            for(PersonData personData : data) {
+                if(personData.getListMembers() != null && personData.getListMembers().size() > 0) {
+                    for(PersonData member : personData.getListMembers()) {
+                        if(!people.contains(member)) {
+                            people.add(member);
+                        }
+                    }
+                }
+
+                if(personData.getPersonList() != null && personData.getPersonList().size() > 0) {
+                    checkDepartment(people, personData.getPersonList());
+                }
+            }
             initAdapter();
+        }
+    }
+
+    private void checkDepartment(ArrayList<PersonData> listMember, ArrayList<PersonData> listDepartment) {
+        for(PersonData department : listDepartment) {
+            if(department.getListMembers() != null && department.getListMembers().size() > 0) {
+                for(PersonData member : department.getListMembers()) {
+                    if(!listMember.contains(member)) {
+                        listMember.add(member);
+                    }
+                }
+            }
+
+            if(department.getPersonList() != null && department.getPersonList().size() > 0) {
+                checkDepartment(listMember, department.getPersonList());
+            }
         }
     }
 
@@ -324,9 +353,23 @@ public class FragmentMailCreate extends BaseFragment implements pushlishProgress
 
 
                 new Prefs().putListOrganization(list);
-                initAdapter();
 
-                people = new ArrayList<>(list);
+                people = new ArrayList<>();
+                for(PersonData personData : list) {
+                    if(personData.getListMembers() != null && personData.getListMembers().size() > 0) {
+                        for(PersonData member : personData.getListMembers()) {
+                            if(!people.contains(member)) {
+                                people.add(member);
+                            }
+                        }
+                    }
+
+                    if(personData.getPersonList() != null && personData.getPersonList().size() > 0) {
+                        checkDepartment(people, personData.getPersonList());
+                    }
+                }
+
+                initAdapter();
             }, 3000);
         }
     }
