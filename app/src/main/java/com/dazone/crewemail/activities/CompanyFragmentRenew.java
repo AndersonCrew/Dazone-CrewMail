@@ -17,7 +17,6 @@ import com.dazone.crewemail.data.PersonData;
 import com.dazone.crewemail.database.OrganizationUserDBHelper;
 import com.dazone.crewemail.database.ServerSiteDBHelper;
 import com.dazone.crewemail.fragments.BaseFragment;
-import com.dazone.crewemail.interfaces.OnGetAllOfUser;
 import com.dazone.crewemail.utils.Constants;
 import com.dazone.crewemail.utils.Prefs;
 import com.dazone.crewemail.utils.Util;

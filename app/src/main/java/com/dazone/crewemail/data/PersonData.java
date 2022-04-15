@@ -6,7 +6,6 @@ import android.text.TextUtils;
 
 import com.dazone.crewemail.database.OrganizationUserDBHelper;
 import com.dazone.crewemail.dto.ob_belongs;
-import com.dazone.crewemail.interfaces.OnGetAllOfUser;
 import com.dazone.crewemail.webservices.HttpRequest;
 import com.google.gson.annotations.SerializedName;
 

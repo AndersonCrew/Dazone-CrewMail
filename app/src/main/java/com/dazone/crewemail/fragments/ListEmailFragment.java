@@ -55,7 +55,6 @@ import com.dazone.crewemail.event.ReloadListMail;
 import com.dazone.crewemail.event.reloadTitle;
 import com.dazone.crewemail.utils.MailHelper;
 import com.dazone.crewemail.interfaces.BaseHTTPCallBack;
-import com.dazone.crewemail.interfaces.OnGetAllOfUser;
 import com.dazone.crewemail.interfaces.OnGetLocalDataCallback;
 import com.dazone.crewemail.interfaces.OnMailListCallBack;
 import com.dazone.crewemail.interfaces.OnMenuListCallBack;

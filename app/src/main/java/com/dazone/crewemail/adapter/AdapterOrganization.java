@@ -8,19 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.dazone.crewemail.R;
-import com.dazone.crewemail.data.ErrorData;
 import com.dazone.crewemail.data.PersonData;
-import com.dazone.crewemail.database.OrganizationUserDBHelper;
-import com.dazone.crewemail.database.ServerSiteDBHelper;
-import com.dazone.crewemail.interfaces.OnGetAllOfUser;
-import com.dazone.crewemail.utils.Constants;
-import com.dazone.crewemail.utils.Prefs;
-import com.dazone.crewemail.webservices.HttpRequest;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 

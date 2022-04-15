@@ -1,5 +1,9 @@
 package com.dazone.crewemail.activities;
 
+import static com.dazone.crewemail.utils.Statics.TYPE_OUTBOX;
+import static com.dazone.crewemail.utils.StaticsBundle.PREFS_KEY_COMPOSE;
+import static com.dazone.crewemail.utils.Util.compareVersionNames;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
@@ -21,7 +25,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.dazone.crewemail.BuildConfig;
 import com.dazone.crewemail.DaZoneApplication;
@@ -31,15 +34,16 @@ import com.dazone.crewemail.customviews.MailMenuView;
 import com.dazone.crewemail.data.ErrorData;
 import com.dazone.crewemail.data.MailBoxMenuData;
 import com.dazone.crewemail.data.MailTagMenuData;
+import com.dazone.crewemail.data.PersonData;
 import com.dazone.crewemail.data.UserData;
 import com.dazone.crewemail.dto.CheckUpdateDto;
 import com.dazone.crewemail.event.reloadTitle;
 import com.dazone.crewemail.fragments.ListEmailFragment;
 import com.dazone.crewemail.interfaces.BaseHTTPCallBack;
 import com.dazone.crewemail.interfaces.BaseHTTPCallBackWithString;
+import com.dazone.crewemail.interfaces.OnGetAllOfUser;
 import com.dazone.crewemail.utils.EmailBoxStatics;
 import com.dazone.crewemail.utils.PermissionUtils;
-import com.dazone.crewemail.utils.PreferenceUtilities;
 import com.dazone.crewemail.utils.Prefs;
 import com.dazone.crewemail.utils.Statics;
 import com.dazone.crewemail.utils.StaticsBundle;
@@ -59,10 +63,7 @@ import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-import static com.dazone.crewemail.utils.Statics.TYPE_OUTBOX;
-import static com.dazone.crewemail.utils.StaticsBundle.PREFS_KEY_COMPOSE;
-import static com.dazone.crewemail.utils.Util.compareVersionNames;
+import java.util.ArrayList;
 
 public class ListEmailActivity extends ToolBarActivity implements MailMenuView.OnMenuItemClickListener {
     public static ListEmailActivity instance = null;
@@ -81,6 +82,7 @@ public class ListEmailActivity extends ToolBarActivity implements MailMenuView.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        getOrganization();
         displayFloatingButton(true);
         mailMenuView = displayNavigationBar(this);
         if (!EventBus.getDefault().isRegistered(this)) {
@@ -131,6 +133,51 @@ public class ListEmailActivity extends ToolBarActivity implements MailMenuView.O
 
         if (BuildConfig.FLAVOR.equals("serverVersion")) {
             checkVersion();
+        }
+    }
+
+    private void getOrganization() {
+        ArrayList<PersonData> data = new Prefs().getListOrganization();
+        if(data == null || data.size() <= 0) {
+
+            HttpRequest.getInstance().getDepartment(new OnGetAllOfUser() {
+                @Override
+                public void onGetAllOfUserSuccess(ArrayList<PersonData> list) {
+                    getListMember(list, true);
+                }
+
+                @Override
+                public void onGetAllOfUserFail(ErrorData errorData) {
+
+                }
+            });
+        }
+    }
+
+    private void getListMember(ArrayList<PersonData> list, boolean flag) {
+        for(PersonData personData : list) {
+            HttpRequest.getInstance().getUserByDepartment(personData.getDepartNo(), new OnGetAllOfUser() {
+                @Override
+                public void onGetAllOfUserSuccess(ArrayList<PersonData> listMember) {
+                    personData.setListMembers(listMember);
+                }
+
+                @Override
+                public void onGetAllOfUserFail(ErrorData errorData) {
+
+                }
+
+            });
+
+            if(personData.getPersonList() != null && personData.getPersonList().size() > 0) {
+                getListMember(personData.getPersonList(), false);
+            }
+        }
+
+        if(flag) {
+            new Handler().postDelayed(() -> {
+                new Prefs().putListOrganization(list);
+            }, 3000);
         }
     }
 

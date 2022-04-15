@@ -198,7 +198,13 @@ public class MailBoxData implements Serializable {
     }
 
     public void setListAttachMent(List<AttachData> listAttachMent) {
-        ListAttachMent = listAttachMent;
+        List<AttachData> list = new ArrayList<>();
+        for(AttachData data : listAttachMent) {
+            if(!list.contains(data)) {
+                list.add(data);
+            }
+        }
+        ListAttachMent = list;
     }
 
     public ArrayList<PersonData> getListPersonData() {

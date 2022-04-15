@@ -30,17 +30,12 @@ import com.dazone.crewemail.View.SoftKeyboardDetectorView;
 import com.dazone.crewemail.customviews.AlertDialogView;
 import com.dazone.crewemail.data.ErrorData;
 import com.dazone.crewemail.data.PersonData;
-import com.dazone.crewemail.data.UserData;
-import com.dazone.crewemail.database.DataManager;
 import com.dazone.crewemail.database.OrganizationUserDBHelper;
 import com.dazone.crewemail.database.ServerSiteDBHelper;
-import com.dazone.crewemail.dto.ob_belongs;
 import com.dazone.crewemail.interfaces.BaseHTTPCallBack;
 import com.dazone.crewemail.interfaces.ICheckSSL;
-import com.dazone.crewemail.interfaces.IDeviceRestriction;
 import com.dazone.crewemail.interfaces.OnAutoLoginCallBack;
 import com.dazone.crewemail.interfaces.OnCheckDevice;
-import com.dazone.crewemail.interfaces.OnGetAllOfUser;
 import com.dazone.crewemail.utils.Constants;
 import com.dazone.crewemail.utils.PreferenceUtilities;
 import com.dazone.crewemail.utils.Prefs;
@@ -50,14 +45,9 @@ import com.dazone.crewemail.webservices.HttpRequest;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import static com.dazone.crewemail.webservices.HttpRequest.sRootLink;
 
 public class LoginActivity extends BaseActivity implements OnCheckDevice, BaseHTTPCallBack {
 

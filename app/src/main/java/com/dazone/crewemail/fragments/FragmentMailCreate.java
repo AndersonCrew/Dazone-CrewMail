@@ -1,5 +1,9 @@
 package com.dazone.crewemail.fragments;
 
+import static com.dazone.crewemail.activities.ActivityMailCreate.isBack;
+import static com.dazone.crewemail.activities.ListEmailActivity.isSendMail;
+import static com.dazone.crewemail.utils.Statics.FILE_PICKER_SELECT;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ClipData;
@@ -57,18 +61,15 @@ import com.dazone.crewemail.data.UserData;
 import com.dazone.crewemail.database.DataManager;
 import com.dazone.crewemail.database.DraftMailDataSource;
 import com.dazone.crewemail.dialog.DialogUtil;
-import com.dazone.crewemail.event.CompleteTextView;
 import com.dazone.crewemail.event.NewMailEvent;
-import com.dazone.crewemail.event.SendMailAction;
-import com.dazone.crewemail.utils.Constants;
-import com.dazone.crewemail.utils.MailHelper;
 import com.dazone.crewemail.interfaces.BaseHTTPCallBack;
 import com.dazone.crewemail.interfaces.OnGetAllOfUser;
 import com.dazone.crewemail.interfaces.OnGetListOfMailAccount;
 import com.dazone.crewemail.interfaces.OnMailDetailCallBack;
 import com.dazone.crewemail.interfaces.pushlishProgressInterface;
+import com.dazone.crewemail.utils.Constants;
 import com.dazone.crewemail.utils.EmailBoxStatics;
-import com.dazone.crewemail.utils.PreferenceUtilities;
+import com.dazone.crewemail.utils.MailHelper;
 import com.dazone.crewemail.utils.Prefs;
 import com.dazone.crewemail.utils.Statics;
 import com.dazone.crewemail.utils.StaticsBundle;
@@ -92,12 +93,8 @@ import java.util.Set;
 
 import javax.annotation.Nullable;
 
-import static com.dazone.crewemail.activities.ActivityMailCreate.isBack;
-import static com.dazone.crewemail.activities.ListEmailActivity.isSendMail;
-import static com.dazone.crewemail.utils.Statics.FILE_PICKER_SELECT;
 
-
-public class FragmentMailCreate extends BaseFragment implements pushlishProgressInterface, TokenCompleteTextView.TokenListener, OnGetAllOfUser, BaseHTTPCallBack, OnGetListOfMailAccount, View.OnClickListener, OnMailDetailCallBack {
+public class FragmentMailCreate extends BaseFragment implements pushlishProgressInterface, TokenCompleteTextView.TokenListener, BaseHTTPCallBack, OnGetListOfMailAccount, View.OnClickListener, OnMailDetailCallBack {
     private String TAG = FragmentMailCreate.class.getName();
     private ImageButton imgDropDown, imgAddAttach;
     private LinearLayout linearMainBccAndCc, linearAttach;
@@ -149,7 +146,6 @@ public class FragmentMailCreate extends BaseFragment implements pushlishProgress
 
         EventBus.getDefault().register(this);
         try {
-            //PersonData.getDepartmentAndUser(this);
             AccountData.getAllAccount(this);
             HttpRequest.getInstance().removeTempFile(null);
         } catch (Exception e) {
@@ -180,12 +176,12 @@ public class FragmentMailCreate extends BaseFragment implements pushlishProgress
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_mail_create, container, false);
         initControl(v);
+        getOrganization();
         return v;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        initAdapter();
         initClick();
         if (task != 3) {
             bindData(dataCreate);
@@ -282,28 +278,57 @@ public class FragmentMailCreate extends BaseFragment implements pushlishProgress
         }
     }
 
-    private ArrayList<PersonData> getPersonDataWithQueryUserNo(String query, ArrayList<PersonData> searchResultList, ArrayList<PersonData> searchList) {
-        if (searchList != null) {
-            for (PersonData personData : searchList) {
-                if (personData.getType() == 2) {
-                    if ((personData.getUserNo() >= 0 && personData.getmEmail().equals(query))) {
-                        boolean isAdd = true;
-                        for (PersonData userAdded : searchResultList) {
-                            if (userAdded.getUserNo() == personData.getUserNo()) {
-                                isAdd = false;
-                            }
-                        }
-                        if (isAdd) {
-                            searchResultList.add(personData);
-                        }
-                    }
+    private void getOrganization() {
+        ArrayList<PersonData> data = new Prefs().getListOrganization();
+        if(data == null || data.size() <= 0) {
+
+            HttpRequest.getInstance().getDepartment(new OnGetAllOfUser() {
+                @Override
+                public void onGetAllOfUserSuccess(ArrayList<PersonData> list) {
+                    getListMember(list, true);
                 }
-                if (personData.getPersonList() != null && personData.getPersonList().size() > 0) {
-                    getPersonDataWithQueryUserNo(query, searchResultList, personData.getPersonList());
+
+                @Override
+                public void onGetAllOfUserFail(ErrorData errorData) {
+
                 }
+            });
+        } else {
+            people = new ArrayList<>(data);
+            initAdapter();
+        }
+    }
+
+    private void getListMember(ArrayList<PersonData> list, boolean flag) {
+        for(PersonData personData : list) {
+            HttpRequest.getInstance().getUserByDepartment(personData.getDepartNo(), new OnGetAllOfUser() {
+                @Override
+                public void onGetAllOfUserSuccess(ArrayList<PersonData> listMember) {
+                    personData.setListMembers(listMember);
+                }
+
+                @Override
+                public void onGetAllOfUserFail(ErrorData errorData) {
+
+                }
+
+            });
+
+            if(personData.getPersonList() != null && personData.getPersonList().size() > 0) {
+                getListMember(personData.getPersonList(), false);
             }
         }
-        return searchResultList;
+
+        if(flag) {
+            new Handler().postDelayed(() -> {
+
+
+                new Prefs().putListOrganization(list);
+                initAdapter();
+
+                people = new ArrayList<>(list);
+            }, 3000);
+        }
     }
 
     void handleSendText(Intent intent) {
@@ -427,11 +452,14 @@ public class FragmentMailCreate extends BaseFragment implements pushlishProgress
         spnMailFrom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                PersonData personData = new PersonData();
-                personData.setFullName(listUser.get(position).getName());
-                personData.setEmail(listUser.get(position).getMailAddress());
-                mailBoxData.setMailFrom(personData);
-                mailBoxData.setUserNo(listUser.get(position).getAccountNo());
+                if(listUser.size() > 0) {
+                    PersonData personData = new PersonData();
+                    personData.setFullName(listUser.get(position).getName());
+                    personData.setEmail(listUser.get(position).getMailAddress());
+                    mailBoxData.setMailFrom(personData);
+                    mailBoxData.setUserNo(listUser.get(position).getAccountNo());
+                }
+
             }
 
             @Override
@@ -510,6 +538,14 @@ public class FragmentMailCreate extends BaseFragment implements pushlishProgress
 
     public void GetFile(Uri uri) {
         String Path = Util.getPathFromUri(getActivity(), uri);
+        if(mailBoxData.getListAttachMent() != null && mailBoxData.getListAttachMent().size() > 0) {
+            for(AttachData attachData : mailBoxData.getListAttachMent()) {
+                if(attachData.getPath().equals(Path)) {
+                    return;
+                }
+            }
+        }
+
         String fileName = Util.getFileName(uri, getActivity());
         String fileType = fileName.substring(fileName.lastIndexOf("."));
         long fileSize = Util.getFileSize(Path);
@@ -606,13 +642,8 @@ public class FragmentMailCreate extends BaseFragment implements pushlishProgress
                 }
             }
         }
-        adapter.notifyDataSetChanged();
-    }
 
-    private void checkRemoveObject(ArrayList<PersonData> resultList) {
-        for(PersonData personData : edtMailCreateTo.getObjects()) {
-            edtMailCreateTo.removeObject(personData);
-        }
+        adapter.notifyDataSetChanged();
     }
 
     public void bindData(MailBoxData data) {
@@ -1220,26 +1251,6 @@ public class FragmentMailCreate extends BaseFragment implements pushlishProgress
         if (isVisible()) {
             Util.showMessageShort(errorData.getMessage());
         }
-    }
-
-    @Override
-    public void onGetAllOfUserSuccess(ArrayList<PersonData> list) {
-        ArrayList<PersonData> test = new ArrayList<>();
-        if (list != null) {
-            for (PersonData personData : list) {
-                if (personData.getFullName().equalsIgnoreCase(UserData.getUserInformation().getFullName())) {
-
-                } else {
-                    if (!people.contains(personData)) {
-                        people.add(personData);
-                    }
-                }
-            }
-        }
-    }
-
-    @Override
-    public void onGetAllOfUserFail(ErrorData errorData) {
     }
 
     @Override
