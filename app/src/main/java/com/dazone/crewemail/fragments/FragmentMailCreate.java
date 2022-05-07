@@ -625,57 +625,54 @@ public class FragmentMailCreate extends BaseFragment implements pushlishProgress
     public void handleSelectedOrganizationResult(int type, ArrayList<PersonData> resultList) {
         if (task != 0) {
             if (resultList != null && resultList.size() > 0) {
+                Set<PersonData> set = new LinkedHashSet<>(resultList);
+                ArrayList<PersonData> uniqueList = new ArrayList<>(set);
+                if (dataCreate != null) {
+                    PersonData data = new PersonData(dataCreate.getFromName(), dataCreate.getFromAddr());
+                    edtMailCreateTo.addObject(data);
+                } else {
+                    PersonData data = new PersonData(resultList.get(0).getFullName(), resultList.get(0).getEmail());
+                    edtMailCreateTo.addObject(data);
+                }
 
+                switch (type) {
+                    case Statics.ORGANIZATION_TO_ACTIVITY:
 
-                if (task != 1) {
+                        resultList.addAll(edtMailCreateTo.getObjects());
 
-                    switch (type) {
-                        case Statics.ORGANIZATION_TO_ACTIVITY:
-
-                            resultList.addAll(edtMailCreateTo.getObjects());
-                            Set<PersonData> set = new LinkedHashSet<>(resultList);
-                            ArrayList<PersonData> uniqueList = new ArrayList<>(set);
-
-                            for (PersonData personData : uniqueList) {
-                                personData.setTypeAddress(0);
-                                UserData userDto = UserData.getUserInformation();
-                                if (!personData.getEmail().equals(userDto.getmEmail())) {
-                                    edtMailCreateTo.addObject(personData);
-                                }
+                        for (PersonData personData : uniqueList) {
+                            personData.setTypeAddress(0);
+                            UserData userDto = UserData.getUserInformation();
+                            if (!personData.getEmail().equals(userDto.getmEmail())) {
+                                edtMailCreateTo.addObject(personData);
                             }
+                        }
 
 
-                            break;
-                        case Statics.ORGANIZATION_CC_ACTIVITY:
+                        break;
+                    case Statics.ORGANIZATION_CC_ACTIVITY:
 
-                            resultList.addAll(edtMailCreateCc.getObjects());
-                            Set<PersonData> setCC = new LinkedHashSet<>(resultList);
-                            ArrayList<PersonData> uniqueListCC = new ArrayList<>(setCC);
+                        resultList.addAll(edtMailCreateCc.getObjects());
 
-                            for (PersonData personData : uniqueListCC) {
-                                personData.setTypeAddress(1);
-                                UserData userDto = UserData.getUserInformation();
-                                if (!personData.getEmail().equals(userDto.getmEmail())) {
-                                    edtMailCreateCc.addObject(personData);
-                                }
+                        for (PersonData personData : uniqueList) {
+                            personData.setTypeAddress(1);
+                            UserData userDto = UserData.getUserInformation();
+                            if (!personData.getEmail().equals(userDto.getmEmail())) {
+                                edtMailCreateCc.addObject(personData);
                             }
-                            break;
-                        case Statics.ORGANIZATION_BCC_ACTIVITY:
-                            resultList.addAll(edtMailCreateBcc.getObjects());
-                            Set<PersonData> setBBC = new LinkedHashSet<>(resultList);
-                            ArrayList<PersonData> uniqueListBBC = new ArrayList<>(setBBC);
+                        }
+                        break;
+                    case Statics.ORGANIZATION_BCC_ACTIVITY:
+                        resultList.addAll(edtMailCreateBcc.getObjects());
+                        for (PersonData personData : uniqueList) {
+                            personData.setTypeAddress(2);
 
-                            for (PersonData personData : uniqueListBBC) {
-                                personData.setTypeAddress(2);
-
-                                UserData userDto = UserData.getUserInformation();
-                                if (!personData.getEmail().equals(userDto.getmEmail())) {
-                                    edtMailCreateBcc.addObject(personData);
-                                }
+                            UserData userDto = UserData.getUserInformation();
+                            if (!personData.getEmail().equals(userDto.getmEmail())) {
+                                edtMailCreateBcc.addObject(personData);
                             }
-                            break;
-                    }
-
+                        }
+                        break;
                 }
                 edtMailCreateTo.allowCollapse(false);
                 if (resultList.size() == 1) {
