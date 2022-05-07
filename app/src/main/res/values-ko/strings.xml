@@ -137,6 +137,7 @@
     <string name="string_success">메일상태변경 완료</string>
     <string name="string_alert_delete_mail">메일을 삭제하시겠습니까?</string>
     <string name="string_alert_download_mail">첨부 파일을 다운로드 하겠습니까?</string>
+    <string name="string_alert_download_mail_again">파일 이름 존재합니다. 새로운 파일을 다운로드 하시겠습니까?</string>
     <string name="mark_as_important">중요한 메일 추가</string>
     <string name="mark_not_important">중요한 메일 해제</string>
     <string name="deleting">삭제중....</string>
@@ -147,6 +148,9 @@
 
     <string name="wating_app_download"> 파일을 다운로드 진행중입니다. 잠시만 기다리주세요</string>
     <string name="company">회사</string>
+
+    <string name="download_again">다운로드</string>
+    <string name="open_file">파일보기</string>
 
     <!--29/12/2015-->
     <string name="string_alert_send_mail_fail">메일을 못 보냈습니다.  파일을 업로드 하는중이라서 잠시만 기다리세요.</string>

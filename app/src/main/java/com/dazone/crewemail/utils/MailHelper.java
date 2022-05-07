@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Environment;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
@@ -28,6 +29,7 @@ import com.dazone.crewemail.data.MenuSortData;
 import com.dazone.crewemail.data.PersonData;
 import com.dazone.crewemail.data.UserData;
 import com.dazone.crewemail.database.UserDBHelper;
+import com.dazone.crewemail.interfaces.IDownloadFileAgain;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -187,6 +189,34 @@ public class MailHelper {
             @Override
             public void onCancelClick() {
 
+            }
+        });
+    }
+
+    public static void displayDownloadFileAgainDialog(final Context context, final String url, final String name, IDownloadFileAgain listener) {
+        AlertDialogView.normalAlertDialogWithCancel(context, context.getString(R.string.app_name), context.getString(R.string.string_alert_download_mail_again), context.getString(R.string.download_again), context.getString(R.string.open_file), new AlertDialogView.OnAlertDialogViewClickEvent() {
+            @Override
+            public void onOkClick(DialogInterface alertDialog) {
+                int num = 0;
+                String fileName = name.split("\\.")[0];
+                String strCount = "";
+                File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/download/" + fileName + "." + name.split("\\.")[1]);
+                while(file.exists()) {
+                    num++;
+                    strCount = "(" + num + ")";
+                    String fn = fileName + strCount;
+                    file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/download/" + fn + "." + name.split("\\.")[1]);
+                }
+
+                String finalName = fileName + strCount + "." + name.split("\\.")[1];
+                int m = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
+                final NotificationTask downloadTask = new NotificationTask(context,finalName,m);
+                downloadTask.execute(url,finalName);
+            }
+
+            @Override
+            public void onCancelClick() {
+                listener.onOpenFile();
             }
         });
     }

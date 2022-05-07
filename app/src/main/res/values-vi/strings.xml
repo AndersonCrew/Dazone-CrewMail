@@ -134,10 +134,13 @@
     <string name="string_success">Hoàn tất upload data</string>
     <string name="string_alert_delete_mail">Bạn muốn xóa mail?</string>
     <string name="string_alert_download_mail">Bạn có muốn tải xuống file đính kèm?</string>
+    <string name="string_alert_download_mail_again">Đã tồn tại tập tin có tiêu đề này Bạn có muốn tải xuống tiếp không?</string>
     <string name="mark_as_important">Thêm vào quan trọng</string>
     <string name="mark_not_important">Hủy quan trọng</string>
     <string name="deleting">Đang xóa....</string>
     <string name="logout">Đăng xuất</string>
+    <string name="download_again">Tải xuống</string>
+    <string name="open_file">Mở file</string>
 
     <string name="string_update_content">Vui lòng cập nhật phiên bản mới nhất!</string>
 

@@ -135,6 +135,7 @@
     <string name="string_success">Update data success</string>
     <string name="string_alert_delete_mail">Are you remove this email?</string>
     <string name="string_alert_download_mail">Do you want to download this file?</string>
+    <string name="string_alert_download_mail_again">Do you want to download this file again?</string>
     <string name="mark_as_important">Mark as important</string>
     <string name="mark_not_important">Mark not important</string>
     <string name="deleting">Deleting....</string>
@@ -268,4 +269,6 @@
     <string name="change_text">Change</string>
     <string name="txt_ask_to_save">Could not send mail. Do you want to save? The system will automatically send when there is an internet connection</string>
     <string name="open_draff_mail">The situation on Mail app of sending mail and saving draft attached tag or picture will be losed. Do you want to continue?</string>
+    <string name="download_again">Download</string>
+    <string name="open_file">Open</string>
 </resources>

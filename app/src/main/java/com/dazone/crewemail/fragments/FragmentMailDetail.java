@@ -48,6 +48,7 @@ import com.dazone.crewemail.data.MailTagMenuData;
 import com.dazone.crewemail.data.PersonData;
 import com.dazone.crewemail.database.DataManager;
 import com.dazone.crewemail.interfaces.BaseHTTPCallBack;
+import com.dazone.crewemail.interfaces.IDownloadFileAgain;
 import com.dazone.crewemail.interfaces.OnMailDetailCallBack;
 import com.dazone.crewemail.interfaces.OnMenuListCallBack;
 import com.dazone.crewemail.utils.EmailBoxStatics;
@@ -368,7 +369,6 @@ public class FragmentMailDetail extends BaseFragment implements OnMailDetailCall
                     itemView.setOnClickListener(v -> {
                         url = MailHelper.getUrl((AttachData) v.getTag());
                         fileName = ((AttachData) v.getTag()).getFileName();
-                        fileName = fileName.split("\\.")[0] +  + mailBoxData.getMailNo() + "." + fileName.split("\\.")[1];
                         File file1 = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/download/" + fileName);
                         if (!file1.exists()) {
                             //check permission
@@ -397,7 +397,13 @@ public class FragmentMailDetail extends BaseFragment implements OnMailDetailCall
                             }
 
                         } else {
-                            openFile(file1);
+                            MailHelper.displayDownloadFileAgainDialog(getContext(), url, fileName , new IDownloadFileAgain() {
+                                @Override
+                                public void onOpenFile() {
+                                    openFile(file1);
+                                }
+                            });
+
                         }
                     });
 

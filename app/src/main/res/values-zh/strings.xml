@@ -137,10 +137,13 @@
     <string name="string_success">邮件状态更改完成</string>
     <string name="string_alert_delete_mail">您确定要删除此消息吗？</string>
     <string name="string_alert_download_mail">您要下载附件吗？</string>
+    <string name="string_alert_download_mail_again">Do you want to download this file again?</string>
     <string name="mark_as_important">添加重要消息</string>
     <string name="mark_not_important">重要邮件发布</string>
     <string name="deleting">删除中....</string>
     <string name="logout">登出</string>
+    <string name="download_again">Download</string>
+    <string name="open_file">Open</string>
 
     <string name="string_update_content">存在最新版本.\n您要更新吗？</string>
 
