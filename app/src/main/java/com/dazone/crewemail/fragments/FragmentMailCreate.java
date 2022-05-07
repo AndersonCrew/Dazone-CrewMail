@@ -51,6 +51,7 @@ import com.dazone.crewemail.adapter.AdapterMailCreateAttachLinear;
 import com.dazone.crewemail.adapter.AdapterMailCreateFromSpiner;
 import com.dazone.crewemail.customviews.AlertDialogView;
 import com.dazone.crewemail.customviews.PersonCompleteView;
+import com.dazone.crewemail.customviews.Utility;
 import com.dazone.crewemail.data.AccountData;
 import com.dazone.crewemail.data.AttachData;
 import com.dazone.crewemail.data.ErrorData;
@@ -698,7 +699,7 @@ public class FragmentMailCreate extends BaseFragment implements pushlishProgress
                 chkMailCreateQuote.setVisibility(View.VISIBLE);
             }
 
-            edtMailCreateSubject.setText(data.getSubject());
+            edtMailCreateSubject.setText(Utility.preFixSubject(task, data.getSubject()));
             handleSelectedOrganizationResult(Statics.ORGANIZATION_TO_ACTIVITY, data.getListPersonDataTo());
             handleSelectedOrganizationResult(Statics.ORGANIZATION_CC_ACTIVITY, data.getListPersonDataCc());
             handleSelectedOrganizationResult(Statics.ORGANIZATION_BCC_ACTIVITY, data.getListPersonDataBcc());

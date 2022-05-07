@@ -379,6 +379,22 @@ public class Utility {
         }
     }
 
+    public static String preFixSubject(int task, String subject) {
+        String preFix = "";
+        switch (task) {
+            case 0: preFix = "FW: ";
+            break;
+            case 1:
+            case 2:
+                preFix = "RE: ";
+                break;
+            default:
+                preFix = "";
+        }
+
+        return preFix + subject;
+    }
+
 
     private static final String IMG_SRC_REGEX = "(?is:<img[^>]+src\\s*=\\s*['\"]?([a-z]+)\\:)";
     private static final Pattern IMG_PATTERN = Pattern.compile(IMG_SRC_REGEX);
