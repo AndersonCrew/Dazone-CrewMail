@@ -13,6 +13,7 @@
         <entry key="app/src/main/res/layout/activity_organization.xml" value="0.36041666666666666" />
         <entry key="app/src/main/res/layout/fragment_company_renew.xml" value="0.36041666666666666" />
         <entry key="app/src/main/res/layout/fragment_mail_create.xml" value="0.36041666666666666" />
+        <entry key="app/src/main/res/layout/fragment_mail_detail.xml" value="0.36041666666666666" />
         <entry key="app/src/main/res/layout/fragment_search_renew.xml" value="0.36041666666666666" />
         <entry key="app/src/main/res/layout/item_member.xml" value="0.36041666666666666" />
         <entry key="app/src/main/res/layout/item_organization_company.xml" value="0.36041666666666666" />

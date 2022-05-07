@@ -1,5 +1,8 @@
 package com.dazone.crewemail.fragments;
 
+import static com.dazone.crewemail.utils.DialogUtils.dismissProgressDialog;
+import static com.dazone.crewemail.utils.DialogUtils.showProgressDialog;
+
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -10,15 +13,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.DocumentsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
-import android.text.Html;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -47,11 +47,11 @@ import com.dazone.crewemail.data.MailBoxData;
 import com.dazone.crewemail.data.MailTagMenuData;
 import com.dazone.crewemail.data.PersonData;
 import com.dazone.crewemail.database.DataManager;
-import com.dazone.crewemail.utils.MailHelper;
 import com.dazone.crewemail.interfaces.BaseHTTPCallBack;
 import com.dazone.crewemail.interfaces.OnMailDetailCallBack;
 import com.dazone.crewemail.interfaces.OnMenuListCallBack;
 import com.dazone.crewemail.utils.EmailBoxStatics;
+import com.dazone.crewemail.utils.MailHelper;
 import com.dazone.crewemail.utils.PreferenceUtilities;
 import com.dazone.crewemail.utils.Prefs;
 import com.dazone.crewemail.utils.Statics;
@@ -60,7 +60,6 @@ import com.dazone.crewemail.utils.TimeUtils;
 import com.dazone.crewemail.utils.Util;
 import com.dazone.crewemail.webservices.HttpRequest;
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.google.gson.Gson;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -68,9 +67,6 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
-
-import static com.dazone.crewemail.utils.DialogUtils.dismissProgressDialog;
-import static com.dazone.crewemail.utils.DialogUtils.showProgressDialog;
 
 public class FragmentMailDetail extends BaseFragment implements OnMailDetailCallBack {
     private static final int EXTERNAL_STORAGE_PERMISSION_CONSTANT = 1;
@@ -372,6 +368,7 @@ public class FragmentMailDetail extends BaseFragment implements OnMailDetailCall
                     itemView.setOnClickListener(v -> {
                         url = MailHelper.getUrl((AttachData) v.getTag());
                         fileName = ((AttachData) v.getTag()).getFileName();
+                        fileName = fileName.split("\\.")[0] +  + mailBoxData.getMailNo() + "." + fileName.split("\\.")[1];
                         File file1 = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/download/" + fileName);
                         if (!file1.exists()) {
                             //check permission
@@ -396,7 +393,7 @@ public class FragmentMailDetail extends BaseFragment implements OnMailDetailCall
                                     // result of the request.
                                 }
                             } else {
-                                MailHelper.displayDownloadFileDialog(getActivity(), url, ((AttachData) v.getTag()).getFileName());
+                                MailHelper.displayDownloadFileDialog(getActivity(), url, fileName);
                             }
 
                         } else {
