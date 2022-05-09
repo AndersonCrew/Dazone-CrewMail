@@ -7,7 +7,6 @@ import android.util.Log;
 
 import com.dazone.crewemail.DaZoneApplication;
 import com.dazone.crewemail.database.OrganizationUserDBHelper;
-import com.dazone.crewemail.sync.MailListSync;
 import com.dazone.crewemail.utils.Statics;
 import com.dazone.crewemail.utils.Util;
 import com.google.gson.Gson;
@@ -98,7 +97,6 @@ public class UserData extends BaseObservable {
         DaZoneApplication.getInstance().getPrefs().removeSetting();
         DaZoneApplication.getInstance().getPrefs().removeOrganization();
         DaZoneApplication.getInstance().getPrefs().putLongValue(Statics.SAVE_BOX_NO_PREF, 0);
-        MailListSync.Instance().stop();
         OrganizationUserDBHelper.clearData();
         Util.clearList(context);
         _instance = null;

@@ -49,8 +49,6 @@ import com.dazone.crewemail.data.MailTagMenuData;
 import com.dazone.crewemail.data.MenuSortData;
 import com.dazone.crewemail.data.PersonData;
 import com.dazone.crewemail.database.GetMailListTask;
-import com.dazone.crewemail.database.OrganizationUserDBHelper;
-import com.dazone.crewemail.database.ServerSiteDBHelper;
 import com.dazone.crewemail.event.ReloadListMail;
 import com.dazone.crewemail.event.reloadTitle;
 import com.dazone.crewemail.utils.MailHelper;
@@ -58,7 +56,6 @@ import com.dazone.crewemail.interfaces.BaseHTTPCallBack;
 import com.dazone.crewemail.interfaces.OnGetLocalDataCallback;
 import com.dazone.crewemail.interfaces.OnMailListCallBack;
 import com.dazone.crewemail.interfaces.OnMenuListCallBack;
-import com.dazone.crewemail.sync.MailListSync;
 import com.dazone.crewemail.utils.EmailBoxStatics;
 import com.dazone.crewemail.utils.Prefs;
 import com.dazone.crewemail.utils.Statics;
@@ -356,6 +353,7 @@ public class ListEmailFragment extends BaseFragment implements BaseHTTPCallBack,
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         HttpRequest.getInstance().getEmailList(mMailBoxNo, anchorMailNo, reloadEmailCount, true, mMailType, mSearchType, mSearchQuery, quickSearch, sortColum, isAscend, new OnMailListCallBack() {
             @Override
             public void onMailListSuccess(List<MailData> mailDataList, int totalEmailCount) {

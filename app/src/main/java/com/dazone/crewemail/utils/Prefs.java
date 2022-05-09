@@ -100,13 +100,6 @@ public class Prefs {
 
     public void removeSetting() {
         prefs.edit().remove(Statics.KEY_PREFERENCES_PIN).apply();
-        prefs.edit().remove(Statics.KEY_PREFERENCES_NOTIFICATION_NEW_MAIL).apply();
-        prefs.edit().remove(Statics.KEY_PREFERENCES_NOTIFICATION_SOUND).apply();
-        prefs.edit().remove(Statics.KEY_PREFERENCES_NOTIFICATION_VIBRATE).apply();
-        prefs.edit().remove(Statics.KEY_PREFERENCES_NOTIFICATION_TIME).apply();
-        prefs.edit().remove(Statics.KEY_PREFERENCES_NOTIFICATION_TIME_TO_TIME).apply();
-        prefs.edit().remove(Statics.KEY_PREFERENCES_NOTIFICATION_TIME_FROM_TIME).apply();
-
         prefs.edit().remove(LAST_SYNC).apply();
         prefs.edit().remove(SYNC_MAIL_BOX).apply();
         prefs.edit().remove(MAIL_ACCOUNT_LIST).apply();
