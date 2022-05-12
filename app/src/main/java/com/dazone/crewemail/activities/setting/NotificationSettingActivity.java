@@ -13,10 +13,13 @@ import android.widget.Toast;
 
 import com.dazone.crewemail.R;
 import com.dazone.crewemail.activities.BaseActivity;
+import com.dazone.crewemail.data.ErrorData;
+import com.dazone.crewemail.interfaces.BaseHTTPCallBack;
 import com.dazone.crewemail.utils.Prefs;
 import com.dazone.crewemail.utils.Statics;
 import com.dazone.crewemail.utils.TimeUtils;
 import com.dazone.crewemail.utils.Util;
+import com.dazone.crewemail.webservices.HttpRequest;
 
 import java.util.Calendar;
 
@@ -34,6 +37,9 @@ public class NotificationSettingActivity extends BaseActivity implements View.On
     private SwitchCompat swTime;
     private TextView tvFromTime;
     private TextView tvToTime,tv_notification_time;
+
+    private String strToTime;
+    private String strFromTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,20 +76,63 @@ public class NotificationSettingActivity extends BaseActivity implements View.On
      * GET DATA FROM PREFERENCES
      */
     private void getData() {
-        swNewMail.setChecked(new Prefs().getBooleanValue(Statics.KEY_PREFERENCES_NOTIFICATION_NEW_MAIL, true));
-        swSound.setChecked(new Prefs().getBooleanValue(Statics.KEY_PREFERENCES_NOTIFICATION_SOUND, true));
-        swVibrate.setChecked(new Prefs().getBooleanValue(Statics.KEY_PREFERENCES_NOTIFICATION_VIBRATE, true));
-        swTime.setChecked(new Prefs().getBooleanValue(Statics.KEY_PREFERENCES_NOTIFICATION_TIME, false));
+        HttpRequest.getInstance().getNotificationSetting(new BaseHTTPCallBack() {
+            @Override
+            public void onHTTPSuccess() {
+                swNewMail.setChecked(new Prefs().getBooleanValue(Statics.KEY_PREFERENCES_NOTIFICATION_NEW_MAIL, true));
+                swSound.setChecked(new Prefs().getBooleanValue(Statics.KEY_PREFERENCES_NOTIFICATION_SOUND, true));
+                swVibrate.setChecked(new Prefs().getBooleanValue(Statics.KEY_PREFERENCES_NOTIFICATION_VIBRATE, true));
+                swTime.setChecked(new Prefs().getBooleanValue(Statics.KEY_PREFERENCES_NOTIFICATION_TIME, false));
 
-        String strToTime = new Prefs().getStringValue(Statics.KEY_PREFERENCES_NOTIFICATION_TIME_TO_TIME, Util.getString(R.string.setting_notification_to_time));
-        String strFromTime = new Prefs().getStringValue(Statics.KEY_PREFERENCES_NOTIFICATION_TIME_FROM_TIME, Util.getString(R.string.setting_notification_from_time));
+                strToTime = new Prefs().getStringValue(Statics.KEY_PREFERENCES_NOTIFICATION_TIME_TO_TIME, Util.getString(R.string.setting_notification_to_time));
+                strFromTime = new Prefs().getStringValue(Statics.KEY_PREFERENCES_NOTIFICATION_TIME_FROM_TIME, Util.getString(R.string.setting_notification_from_time));
 
-        tvToTime.setText(strToTime);
-        tvFromTime.setText(strFromTime);
-        setEnable(swNewMail.isChecked());
-        tv_notification_time.setText(Html.fromHtml("<font color=#878787>"
-                + getResources().getString(R.string.setting_notification_time) + "<br />" + "<small>" + getResources().getString(R.string.setting_notification_time_2)
-                + "</small>"));
+                tvToTime.setText(strToTime);
+                tvFromTime.setText(strFromTime);
+                setEnable(swNewMail.isChecked());
+                tv_notification_time.setText(Html.fromHtml("<font color=#878787>"
+                        + getResources().getString(R.string.setting_notification_time) + "<br />" + "<small>" + getResources().getString(R.string.setting_notification_time_2)
+                        + "</small>"));
+            }
+
+            @Override
+            public void onHTTPFail(ErrorData errorDto) {
+
+            }
+
+        });
+
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        String notiTime = "\"notitime\":";
+        String endTime = "\"endtime\":";
+        String startTime = "{\"starttime\":";
+        String enable = "\"enabled\":";
+        String StrTrue = "true,";
+        String StrFalse = "false,";
+        String timeStart = "\"" + strFromTime + "\",";
+        String endStart = "\"" + strToTime + "\"}";
+        String notificationStr = startTime + timeStart + enable +  (swNewMail.isChecked() ? StrTrue : StrFalse)
+                + notiTime +  (swTime.isChecked() ? StrTrue : StrFalse) + endTime + endStart;
+        String deviceId = new Prefs().getStringValue(Statics.KEY_DEVICE_ID, "");
+
+        HttpRequest.getInstance().updateNotification(notificationStr, deviceId, new BaseHTTPCallBack() {
+            @Override
+            public void onHTTPSuccess() {
+
+            }
+
+            @Override
+            public void onHTTPFail(ErrorData errorDto) {
+
+            }
+
+        });
     }
 
     @Override
@@ -108,8 +157,6 @@ public class NotificationSettingActivity extends BaseActivity implements View.On
         mTimePicker = new TimePickerDialog(this,android.R.style.Theme_Material_Light_Dialog_Alert, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                String strToTime;
-                String strFromTime;
                 switch (v.getId()) {
                     case R.id.tv_from_time:
                         strToTime = new Prefs().getStringValue(Statics.KEY_PREFERENCES_NOTIFICATION_TIME_TO_TIME, Util.getString(R.string.setting_notification_to_time));

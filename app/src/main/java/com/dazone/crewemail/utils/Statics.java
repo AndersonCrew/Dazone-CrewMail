@@ -28,6 +28,7 @@ public class Statics {
     public static final String KEY_PREFERENCES_NOTIFICATION_TIME = "KEY_PREFERENCES_NOTIFICATION_TIME";
     public static final String KEY_PREFERENCES_NOTIFICATION_TIME_TO_TIME = "KEY_PREFERENCES_NOTIFICATION_TIME_TO_TIME";
     public static final String KEY_PREFERENCES_NOTIFICATION_TIME_FROM_TIME = "KEY_PREFERENCES_NOTIFICATION_TIME_FROM_TIME";
+    public static final String KEY_DEVICE_ID = "KEY_DEVICE_ID";
 
     public static final String yyyy_MM_dd_HH_mm_ss_SSS = "yyyy-MM-dd HH:mm:ss.SSS";
 

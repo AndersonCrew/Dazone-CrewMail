@@ -1,7 +1,6 @@
 package com.dazone.crewemail.webservices;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -16,33 +15,30 @@ import com.dazone.crewemail.data.MailBoxData;
 import com.dazone.crewemail.data.MailBoxMenuData;
 import com.dazone.crewemail.data.MailData;
 import com.dazone.crewemail.data.MailProfileData;
+import com.dazone.crewemail.data.NotificationSetting;
 import com.dazone.crewemail.data.PersonData;
 import com.dazone.crewemail.data.ReadDateData;
 import com.dazone.crewemail.data.ReceiveData;
 import com.dazone.crewemail.data.UserData;
 import com.dazone.crewemail.database.AccountUserDBHelper;
-import com.dazone.crewemail.database.OrganizationUserDBHelper;
-import com.dazone.crewemail.database.ServerSiteDBHelper;
 import com.dazone.crewemail.database.UserDBHelper;
 import com.dazone.crewemail.dto.MessageDto;
-import com.dazone.crewemail.interfaces.ICheckSSL;
-import com.dazone.crewemail.interfaces.IDeviceRestriction;
-import com.dazone.crewemail.utils.Constants;
-import com.dazone.crewemail.utils.MailHelper;
 import com.dazone.crewemail.interfaces.BaseHTTPCallBack;
 import com.dazone.crewemail.interfaces.BaseHTTPCallBackWithString;
-import com.dazone.crewemail.interfaces.CheckUpdateDepartmentListener;
+import com.dazone.crewemail.interfaces.ICheckSSL;
+import com.dazone.crewemail.interfaces.IDeviceRestriction;
 import com.dazone.crewemail.interfaces.OnAutoLoginCallBack;
 import com.dazone.crewemail.interfaces.OnGetAllOfUser;
 import com.dazone.crewemail.interfaces.OnGetContact;
 import com.dazone.crewemail.interfaces.OnGetInfoUser;
 import com.dazone.crewemail.interfaces.OnGetListOfMailAccount;
 import com.dazone.crewemail.interfaces.OnGetReadDate;
-import com.dazone.crewemail.interfaces.OnGetStringCallBack;
 import com.dazone.crewemail.interfaces.OnMailDetailCallBack;
 import com.dazone.crewemail.interfaces.OnMailListCallBack;
 import com.dazone.crewemail.interfaces.OnMenuListCallBack;
+import com.dazone.crewemail.utils.Constants;
 import com.dazone.crewemail.utils.EmailBoxStatics;
+import com.dazone.crewemail.utils.MailHelper;
 import com.dazone.crewemail.utils.PreferenceUtilities;
 import com.dazone.crewemail.utils.Prefs;
 import com.dazone.crewemail.utils.Statics;
@@ -50,7 +46,6 @@ import com.dazone.crewemail.utils.TimeUtils;
 import com.dazone.crewemail.utils.Urls;
 import com.dazone.crewemail.utils.Util;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
@@ -59,8 +54,6 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -280,6 +273,69 @@ public class HttpRequest {
             public void onSuccess(String response) {
                 if (baseHTTPCallBack != null)
                     baseHTTPCallBack.onHTTPSuccess();
+            }
+
+            @Override
+            public void onFailure(ErrorData error) {
+                if (baseHTTPCallBack != null)
+                    baseHTTPCallBack.onHTTPFail(error);
+            }
+        });
+    }
+
+    public void updateNotification(String notification, String deviceId, final BaseHTTPCallBack baseHTTPCallBack) {
+        String url = sRootLink + Urls.URL_INSERT_DEVICE;
+
+        Map<String, String> params = new HashMap<>();
+        params.put("sessionId", "" + DaZoneApplication.getInstance().getPrefs().getaccesstoken());
+        params.put("languageCode", Locale.getDefault().getLanguage().toUpperCase());
+        params.put("timeZoneOffset", TimeUtils.getTimezoneOffsetInMinutes());
+        params.put("deviceID", deviceId);
+        params.put("notificationOptions", notification);
+        params.put("osVersion", android.os.Build.VERSION.RELEASE);
+        WebServiceManager webServiceManager = new WebServiceManager();
+        webServiceManager.doJsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new WebServiceManager.RequestListener<String>() {
+            @Override
+            public void onSuccess(String response) {
+                if (baseHTTPCallBack != null)
+                    baseHTTPCallBack.onHTTPSuccess();
+            }
+
+            @Override
+            public void onFailure(ErrorData error) {
+                if (baseHTTPCallBack != null)
+                    baseHTTPCallBack.onHTTPFail(error);
+            }
+        });
+    }
+
+    public void getNotificationSetting(final BaseHTTPCallBack baseHTTPCallBack) {
+        String url = sRootLink + Urls.URL_GET_NOTIFICATION_SETTING;
+        Map<String, String> params = new HashMap<>();
+        params.put("sessionId", "" + DaZoneApplication.getInstance().getPrefs().getaccesstoken());
+        params.put("languageCode", Locale.getDefault().getLanguage().toUpperCase());
+        params.put("timeZoneOffset", TimeUtils.getTimezoneOffsetInMinutes());
+
+        WebServiceManager webServiceManager = new WebServiceManager();
+        webServiceManager.doJsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new WebServiceManager.RequestListener<String>() {
+            @Override
+            public void onSuccess(String response) {
+                if (baseHTTPCallBack != null) {
+                    Gson gson = new Gson();
+                    NotificationSetting notificationSetting = gson.fromJson(response, NotificationSetting.class);
+                    if (notificationSetting != null) {
+                        NotificationSetting.NotificationOptions notificationOptions = gson.fromJson(notificationSetting.getNotificationOptions(), NotificationSetting.NotificationOptions.class);
+                        if(notificationOptions != null) {
+                            new Prefs().putStringValue(Statics.KEY_PREFERENCES_NOTIFICATION_TIME_FROM_TIME, notificationOptions.getStarttime());
+                            new Prefs().putStringValue(Statics.KEY_PREFERENCES_NOTIFICATION_TIME_TO_TIME, notificationOptions.getEndtime());
+                            new Prefs().putBooleanValue(Statics.KEY_PREFERENCES_NOTIFICATION_NEW_MAIL, notificationOptions.isEnabled());
+                            new Prefs().putBooleanValue(Statics.KEY_PREFERENCES_NOTIFICATION_TIME, notificationOptions.isNotitime());
+                        }
+
+                    }
+                    baseHTTPCallBack.onHTTPSuccess();
+                }
+
             }
 
             @Override

@@ -486,6 +486,8 @@ public class LoginActivity extends BaseActivity implements OnCheckDevice, BaseHT
                     gcm = GoogleCloudMessaging.getInstance(context);
                 }
                 regID = gcm.register(Statics.GOOGLE_SENDER_ID_MAIL);
+
+                new Prefs().putStringValue(Statics.KEY_DEVICE_ID, regID);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }

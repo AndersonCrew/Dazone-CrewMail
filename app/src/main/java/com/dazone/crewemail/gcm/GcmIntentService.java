@@ -209,8 +209,6 @@ public class GcmIntentService extends IntentService {
                 v.vibrate(0);
             }
 
-            mBuilder.setContentIntent(contentIntent);
-
             Notification notification = mBuilder.build();
             notification.number = 100;
 
@@ -270,8 +268,6 @@ public class GcmIntentService extends IntentService {
                 Vibrator v = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
                 v.vibrate(0);
             }
-
-            mBuilder.setContentIntent(contentIntent);
 
             Notification notification = mBuilder.build();
             notification.number = 100;

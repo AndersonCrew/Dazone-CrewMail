@@ -10,8 +10,6 @@ import com.dazone.crewemail.utils.Statics;
 import com.dazone.crewemail.utils.StaticsBundle;
 import com.dazone.crewemail.utils.Util;
 
-import java.util.HashMap;
-
 /**
  * Created by THANHTUNG on 21/12/2015.
  */
@@ -32,20 +30,17 @@ public class ActivityMailDetail extends ToolBarActivity {
 
     @Override
     protected void addFragment(Bundle bundle, int mainContainer) {
-        Bundle bundleq = getIntent().getExtras();
-        if (bundleq != null) {
-            a = bundleq.containsKey(StaticsBundle.BUNDLE_MAIL_BOX_CLASS_NAME)? bundleq.getString(StaticsBundle.BUNDLE_MAIL_BOX_CLASS_NAME) : "";
-            mailNo = bundleq.containsKey(StaticsBundle.BUNDLE_MAIL_NO)? bundleq.getLong(StaticsBundle.BUNDLE_MAIL_NO) : 2505;
-            isRead = bundleq.containsKey(StaticsBundle.PREFS_KEY_ISREAD) && bundleq.getBoolean(StaticsBundle.PREFS_KEY_ISREAD);
+        a = getIntent().getStringExtra(StaticsBundle.BUNDLE_MAIL_BOX_CLASS_NAME);
+        mailNo = getIntent().getLongExtra(StaticsBundle.BUNDLE_MAIL_NO, 2505);
+        isRead = getIntent().getBooleanExtra(StaticsBundle.PREFS_KEY_ISREAD, true);
 
-            isFromNotification = bundleq.getBoolean(StaticsBundle.BUNDLE_MAIL_FROM_NOTIFICATION, false);
+        isFromNotification = getIntent().getBooleanExtra(StaticsBundle.BUNDLE_MAIL_FROM_NOTIFICATION, false);
 
-            if (isFromNotification) {
-                mailBoxNo = bundleq.getString(StaticsBundle.BUNDLE_MAIL_FROM_NOTIFICATION_MAILBOX_NO, "0");
-                new Prefs().putLongValue(Statics.SAVE_BOX_NO_PREF, Long.parseLong(mailBoxNo));
-            }
-
+        if (isFromNotification) {
+            mailBoxNo = getIntent().getStringExtra(StaticsBundle.BUNDLE_MAIL_FROM_NOTIFICATION_MAILBOX_NO);
+            new Prefs().putLongValue(Statics.SAVE_BOX_NO_PREF, Long.parseLong(mailBoxNo));
         }
+
         if (bundle == null) {
             fragmentMailDetail = FragmentMailDetail.newInstance(mailNo, a, isRead);
             Util.addFragmentToActivity(getSupportFragmentManager(), fragmentMailDetail, mainContainer, false);

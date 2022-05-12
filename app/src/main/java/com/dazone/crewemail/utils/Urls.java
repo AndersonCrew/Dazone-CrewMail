@@ -10,6 +10,7 @@ public class Urls {
 
     public static final String URL_SIGN_UP = "http://www.crewcloud.net/UI/Center/MobileService.asmx/SendConfirmEmail";
     public static final String URL_INSERT_DEVICE = "/UI/MobileMail3/MobileDataService.asmx/InsertAndroidDevice";
+    public static final String URL_GET_NOTIFICATION_SETTING = "/UI/MobileMail3/MobileDataService.asmx/GetAndroidDevice";
     public static final String LOGIN_DEVICE_RESTRICTION = "/UI/WebService/WebServiceCenter.asmx/CheckMobileDevicesAccessrestrictions";
     public static final String URL_DELETE_DEVICE = "/UI/MobileMail3/MobileDataService.asmx/DeleteAndroidDevice";
     public static final String URL_INSERT_PHONE_TOKEN = URL_DEFAULT_API + "/UI/WebService/WebServiceCenter.asmx/AddPhoneTokens";

@@ -1,19 +1,14 @@
 package com.dazone.crewemail.activities;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.dazone.crewemail.DaZoneApplication;
 import com.dazone.crewemail.R;
-import com.dazone.crewemail.customviews.AlertDialogView;
-import com.dazone.crewemail.utils.Prefs;
-import com.dazone.crewemail.utils.Util;
 
 import java.util.Locale;
 
@@ -43,7 +38,6 @@ public class BaseActivity extends AppCompatActivity {
             super.onBackPressed();
         } else {
             if (mIsExit) {
-                super.onBackPressed();
                 System.exit(0);
             } else {
                 this.mIsExit = true;
