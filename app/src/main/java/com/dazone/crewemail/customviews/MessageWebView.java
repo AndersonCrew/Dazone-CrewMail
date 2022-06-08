@@ -63,7 +63,7 @@ public class MessageWebView extends RigidWebView {
         boolean isAdjust = new Prefs().getBooleanValue(Statics.KEY_PREFERENCES_ADJUST_TO_SCREEN_WIDTH, true);
 
         if (isAdjust) {
-            this.setInitialScale(20);
+            this.setInitialScale(400);
         } else {
             this.setInitialScale(1);
         }
