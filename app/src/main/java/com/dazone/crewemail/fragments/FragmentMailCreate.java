@@ -623,68 +623,72 @@ public class FragmentMailCreate extends BaseFragment implements pushlishProgress
         new Upload().execute(attachData.getPath(), attachData.getFileName());
     }
 
-    public void handleSelectedOrganizationResult(int type, ArrayList<PersonData> resultList) {
-        if (task != 0) {
-            if (resultList != null && resultList.size() > 0) {
-                Set<PersonData> set = new LinkedHashSet<>(resultList);
-                ArrayList<PersonData> uniqueList = new ArrayList<>(set);
-                if (dataCreate != null) {
-                    PersonData data = new PersonData(dataCreate.getFromName(), dataCreate.getFromAddr());
-                    edtMailCreateTo.addObject(data);
-                } else {
-                    PersonData data = new PersonData(resultList.get(0).getFullName(), resultList.get(0).getEmail());
-                    edtMailCreateTo.addObject(data);
-                }
-
-                switch (type) {
-                    case Statics.ORGANIZATION_TO_ACTIVITY:
-
-                        resultList.addAll(edtMailCreateTo.getObjects());
-
-                        for (PersonData personData : uniqueList) {
-                            personData.setTypeAddress(0);
-                            UserData userDto = UserData.getUserInformation();
-                            if (!personData.getEmail().equals(userDto.getmEmail())) {
-                                edtMailCreateTo.addObject(personData);
-                            }
-                        }
-
-
-                        break;
-                    case Statics.ORGANIZATION_CC_ACTIVITY:
-
-                        resultList.addAll(edtMailCreateCc.getObjects());
-
-                        for (PersonData personData : uniqueList) {
-                            personData.setTypeAddress(1);
-                            UserData userDto = UserData.getUserInformation();
-                            if (!personData.getEmail().equals(userDto.getmEmail())) {
-                                edtMailCreateCc.addObject(personData);
-                            }
-                        }
-                        break;
-                    case Statics.ORGANIZATION_BCC_ACTIVITY:
-                        resultList.addAll(edtMailCreateBcc.getObjects());
-                        for (PersonData personData : uniqueList) {
-                            personData.setTypeAddress(2);
-
-                            UserData userDto = UserData.getUserInformation();
-                            if (!personData.getEmail().equals(userDto.getmEmail())) {
-                                edtMailCreateBcc.addObject(personData);
-                            }
-                        }
-                        break;
-                }
-                edtMailCreateTo.allowCollapse(false);
-                if (resultList.size() == 1) {
-                    edtMailCreateTo.allowCollapse(false);
-                } else {
-                    edtMailCreateTo.allowCollapse(true);
+    public void bindReceiver(PersonCompleteView etReceiver, ArrayList<PersonData> resultList) {
+        if(resultList != null && resultList.size() > 0) {
+            Set<PersonData> set = new LinkedHashSet<>(resultList);
+            ArrayList<PersonData> uniqueList = new ArrayList<>(set);
+            resultList.addAll(etReceiver.getObjects());
+            for(PersonData personData : resultList) {
+                if(!uniqueList.contains(personData)) {
+                    uniqueList.add(personData);
                 }
             }
+
+            for (PersonData personData : uniqueList) {
+                personData.setTypeAddress(getTypeAddress(etReceiver));
+                UserData userDto = UserData.getUserInformation();
+                if (!personData.getEmail().equals(userDto.getmEmail())) {
+                    etReceiver.addObject(personData);
+                }
+            }
+
+            adapter.notifyDataSetChanged();
         }
 
-        adapter.notifyDataSetChanged();
+    }
+
+    private int getTypeAddress(PersonCompleteView etReceiver) {
+        if(etReceiver.getId() == edtMailCreateTo.getId()) {
+            return 0;
+        } else if(etReceiver.getId() == edtMailCreateCc.getId()) {
+            return 1;
+        } else return 2;
+    }
+
+    public void handleSelectedOrganizationResult(int type, ArrayList<PersonData> resultList) {
+        if (resultList != null && resultList.size() > 0) {
+
+            ArrayList<PersonData> uniqueList = new ArrayList<>();
+            PersonCompleteView etReceiver;
+            if(type == Statics.ORGANIZATION_TO_ACTIVITY) {
+                etReceiver = edtMailCreateTo;
+            } else if(type == Statics.ORGANIZATION_CC_ACTIVITY) {
+                etReceiver = edtMailCreateCc;
+            } else {
+                etReceiver = edtMailCreateBcc;
+            }
+
+            resultList.addAll(etReceiver.getObjects());
+
+            for(PersonData personData : resultList) {
+                if(!uniqueList.contains(personData)) {
+                    uniqueList.add(personData);
+                }
+            }
+
+            for (PersonData personData : uniqueList) {
+                personData.setTypeAddress(getTypeAddress(etReceiver));
+                UserData userDto = UserData.getUserInformation();
+                if (!personData.getEmail().equals(userDto.getmEmail())) {
+                    etReceiver.addObject(personData);
+                }
+            }
+
+            adapter.notifyDataSetChanged();
+
+            etReceiver.allowCollapse(true);
+
+        }
     }
 
     public void bindData(MailBoxData data) {
@@ -700,9 +704,14 @@ public class FragmentMailCreate extends BaseFragment implements pushlishProgress
             }
 
             edtMailCreateSubject.setText(Utility.preFixSubject(task, data.getSubject()));
-            handleSelectedOrganizationResult(Statics.ORGANIZATION_TO_ACTIVITY, data.getListPersonDataTo());
-            handleSelectedOrganizationResult(Statics.ORGANIZATION_CC_ACTIVITY, data.getListPersonDataCc());
-            handleSelectedOrganizationResult(Statics.ORGANIZATION_BCC_ACTIVITY, data.getListPersonDataBcc());
+            if(task == 1) {
+                bindReceiver(edtMailCreateTo, data.getListPersonDataTo());
+            } else if(task == 2) {
+                bindReceiver(edtMailCreateTo, data.getListPersonDataTo());
+                bindReceiver(edtMailCreateCc, data.getListPersonDataCc());
+                bindReceiver(edtMailCreateBcc, data.getListPersonDataBcc());
+            }
+
             if (task == 3 || task == 0) {
                 if (task == 3) {
                     showDialogDraftMail();
