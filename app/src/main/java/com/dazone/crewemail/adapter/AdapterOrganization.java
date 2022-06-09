@@ -35,7 +35,71 @@ public class AdapterOrganization extends RecyclerView.Adapter<AdapterOrganizatio
     @Override
     public void onBindViewHolder(OrganizationViewHolder organizationViewHolder, int i) {
         if (list != null && list.get(i) != null) {
-            organizationViewHolder.bindData(i);
+
+            PersonData personData = list.get(i);
+            organizationViewHolder.tvOrganizationName.setText(personData.getFullName());
+            organizationViewHolder.ckDepartment.setChecked(personData.isCheck());
+            if (personData.getPersonList() != null && personData.getPersonList().size() > 0) {
+                organizationViewHolder.rvChildOrganization.setAdapter(new AdapterOrganization(personData.getPersonList()));
+            }
+
+            if (personData.getListMembers() != null && personData.getListMembers().size() > 0) {
+                MemberAdapter memberAdapter = new MemberAdapter(personData.getListMembers(), new MemberAdapter.IAllMemberChecked() {
+                    @Override
+                    public void onAllMemberChecked() {
+
+
+                    }
+
+                    @Override
+                    public void onAllMemberNonChecked() {
+
+                    }
+                });
+
+                organizationViewHolder.rvMembers.setAdapter(memberAdapter);
+            }
+
+            organizationViewHolder.ckDepartment.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                personData.setIsCheck(isChecked);
+                if(personData.getListMembers() != null && personData.getListMembers().size() > 0) {
+                    setCheckMemberList(personData.getListMembers(), isChecked);
+                }
+
+                if (personData.getPersonList() != null && personData.getPersonList().size() > 0) {
+                    setCheckDepartment(personData.getPersonList(), isChecked);
+                }
+
+                organizationViewHolder.itemView.post(new Runnable()
+                {
+                    @Override
+                    public void run() {
+                        notifyItemChanged(i);
+                    }
+                });
+
+            });
+        }
+    }
+
+    private void setCheckMemberList(ArrayList<PersonData> list, boolean isCheck) {
+        for(PersonData member : list) {
+            member.setIsCheck(isCheck);
+        }
+    }
+
+
+    private void setCheckDepartment(ArrayList<PersonData> list, boolean isCheck) {
+        for(PersonData member : list) {
+            member.setIsCheck(isCheck);
+
+            if(member.getPersonList() != null && member.getPersonList().size() > 0) {
+                setCheckDepartment(member.getPersonList(), isCheck);
+            }
+
+            if(member.getListMembers() != null && member.getListMembers().size() > 0) {
+                setCheckMemberList(member.getListMembers(), isCheck);
+            }
         }
     }
 
@@ -48,8 +112,6 @@ public class AdapterOrganization extends RecyclerView.Adapter<AdapterOrganizatio
 
         private TextView tvOrganizationName;
         private RecyclerView rvChildOrganization, rvMembers;
-        private MemberAdapter memberAdapter;
-        private AdapterOrganization departmentAdapter;
         private CheckBox ckDepartment;
 
         public OrganizationViewHolder(View itemView) {
@@ -62,79 +124,6 @@ public class AdapterOrganization extends RecyclerView.Adapter<AdapterOrganizatio
             rvChildOrganization = itemView.findViewById(R.id.rvChildOrganization);
             rvMembers = itemView.findViewById(R.id.rvMembers);
             ckDepartment = itemView.findViewById(R.id.ckDepartment);
-        }
-
-        void bindData(int position) {
-            PersonData personData = list.get(position);
-            tvOrganizationName.setText(personData.getFullName());
-            ckDepartment.setChecked(personData.isCheck());
-            if (personData.getPersonList() != null && personData.getPersonList().size() > 0) {
-                departmentAdapter = new AdapterOrganization(personData.getPersonList());
-
-                rvChildOrganization.setAdapter(departmentAdapter);
-            }
-
-            if (personData.getListMembers() != null && personData.getListMembers().size() > 0) {
-                initRecyclerView(personData.getListMembers(), position);
-            }
-
-            ckDepartment.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                personData.setIsCheck(isChecked);
-                if(personData.getListMembers() != null && personData.getListMembers().size() > 0) {
-                    setCheckMemberList(personData.getListMembers(), isChecked);
-                }
-
-                if (personData.getPersonList() != null && personData.getPersonList().size() > 0) {
-                    setCheckDepartment(personData.getPersonList(), isChecked);
-                }
-
-                new Handler().postDelayed(AdapterOrganization.this::notifyDataSetChanged, 300);
-            });
-
-        }
-
-        private void setCheckMemberList(ArrayList<PersonData> list, boolean isCheck) {
-            for(PersonData member : list) {
-                member.setIsCheck(isCheck);
-            }
-        }
-
-
-        private void setCheckDepartment(ArrayList<PersonData> list, boolean isCheck) {
-            for(PersonData member : list) {
-                member.setIsCheck(isCheck);
-
-                if(member.getPersonList() != null && member.getPersonList().size() > 0) {
-                    setCheckDepartment(member.getPersonList(), isCheck);
-                }
-
-                if(member.getListMembers() != null && member.getListMembers().size() > 0) {
-                    setCheckMemberList(member.getListMembers(), isCheck);
-                }
-            }
-        }
-
-        private void initRecyclerView(ArrayList<PersonData> listMember, int position) {
-            memberAdapter = new MemberAdapter(listMember, new MemberAdapter.IAllMemberChecked() {
-                @Override
-                public void onAllMemberChecked() {
-                    if(!list.get(position).isCheck()) {
-                        list.get(position).setIsCheck(true);
-                        notifyItemChanged(position);
-                    }
-
-                }
-
-                @Override
-                public void onAllMemberNonChecked() {
-                    if(list.get(position).isCheck()) {
-                        list.get(position).setIsCheck(false);
-                        notifyItemChanged(position);
-                    }
-                }
-            });
-
-            rvMembers.setAdapter(memberAdapter);
         }
     }
 
@@ -178,10 +167,5 @@ public class AdapterOrganization extends RecyclerView.Adapter<AdapterOrganizatio
                 checkEachDepartment(ChildDepartment, selected);
             }
         }
-    }
-
-
-    public interface onCheckedChange {
-        void onCheckedChange(boolean isChecked);
     }
 }

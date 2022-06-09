@@ -625,16 +625,7 @@ public class FragmentMailCreate extends BaseFragment implements pushlishProgress
 
     public void bindReceiver(PersonCompleteView etReceiver, ArrayList<PersonData> resultList) {
         if(resultList != null && resultList.size() > 0) {
-            Set<PersonData> set = new LinkedHashSet<>(resultList);
-            ArrayList<PersonData> uniqueList = new ArrayList<>(set);
-            resultList.addAll(etReceiver.getObjects());
-            for(PersonData personData : resultList) {
-                if(!uniqueList.contains(personData)) {
-                    uniqueList.add(personData);
-                }
-            }
-
-            for (PersonData personData : uniqueList) {
+            for (PersonData personData : resultList) {
                 personData.setTypeAddress(getTypeAddress(etReceiver));
                 UserData userDto = UserData.getUserInformation();
                 if (!personData.getEmail().equals(userDto.getmEmail())) {
@@ -704,10 +695,12 @@ public class FragmentMailCreate extends BaseFragment implements pushlishProgress
             }
 
             edtMailCreateSubject.setText(Utility.preFixSubject(task, data.getSubject()));
+            ArrayList<PersonData> list = new ArrayList<>();
+            list.add(data.getMailFrom());
             if(task == 1) {
-                bindReceiver(edtMailCreateTo, data.getListPersonDataTo());
+                bindReceiver(edtMailCreateTo, list);
             } else if(task == 2) {
-                bindReceiver(edtMailCreateTo, data.getListPersonDataTo());
+                bindReceiver(edtMailCreateTo, list);
                 bindReceiver(edtMailCreateCc, data.getListPersonDataCc());
                 bindReceiver(edtMailCreateBcc, data.getListPersonDataBcc());
             }
