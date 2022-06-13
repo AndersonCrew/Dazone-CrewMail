@@ -647,39 +647,35 @@ public class FragmentMailCreate extends BaseFragment implements pushlishProgress
     }
 
     public void handleSelectedOrganizationResult(int type, ArrayList<PersonData> resultList) {
-        if (resultList != null && resultList.size() > 0) {
-
-            ArrayList<PersonData> uniqueList = new ArrayList<>();
-            PersonCompleteView etReceiver;
-            if(type == Statics.ORGANIZATION_TO_ACTIVITY) {
-                etReceiver = edtMailCreateTo;
-            } else if(type == Statics.ORGANIZATION_CC_ACTIVITY) {
-                etReceiver = edtMailCreateCc;
-            } else {
-                etReceiver = edtMailCreateBcc;
-            }
-
-            resultList.addAll(etReceiver.getObjects());
-
-            for(PersonData personData : resultList) {
-                if(!uniqueList.contains(personData)) {
-                    uniqueList.add(personData);
-                }
-            }
-
-            for (PersonData personData : uniqueList) {
-                personData.setTypeAddress(getTypeAddress(etReceiver));
-                UserData userDto = UserData.getUserInformation();
-                if (!personData.getEmail().equals(userDto.getmEmail())) {
-                    etReceiver.addObject(personData);
-                }
-            }
-
-            adapter.notifyDataSetChanged();
-
-            etReceiver.allowCollapse(true);
-
+        ArrayList<PersonData> uniqueList = new ArrayList<>();
+        PersonCompleteView etReceiver;
+        if(type == Statics.ORGANIZATION_TO_ACTIVITY) {
+            etReceiver = edtMailCreateTo;
+        } else if(type == Statics.ORGANIZATION_CC_ACTIVITY) {
+            etReceiver = edtMailCreateCc;
+        } else {
+            etReceiver = edtMailCreateBcc;
         }
+
+        etReceiver.clear();
+
+        for(PersonData personData : resultList) {
+            if(!uniqueList.contains(personData)) {
+                uniqueList.add(personData);
+            }
+        }
+
+        for (PersonData personData : uniqueList) {
+            personData.setTypeAddress(getTypeAddress(etReceiver));
+            UserData userDto = UserData.getUserInformation();
+            if (!personData.getEmail().equals(userDto.getmEmail())) {
+                etReceiver.addObject(personData);
+            }
+        }
+
+        adapter.notifyDataSetChanged();
+
+        etReceiver.allowCollapse(true);
     }
 
     public void bindData(MailBoxData data) {
@@ -696,6 +692,8 @@ public class FragmentMailCreate extends BaseFragment implements pushlishProgress
 
             edtMailCreateSubject.setText(Utility.preFixSubject(task, data.getSubject()));
             ArrayList<PersonData> list = new ArrayList<>();
+            PersonData personReply = data.getMailFrom();
+            personReply.setmEmail(personReply.getEmail());
             list.add(data.getMailFrom());
             if(task == 1) {
                 bindReceiver(edtMailCreateTo, list);

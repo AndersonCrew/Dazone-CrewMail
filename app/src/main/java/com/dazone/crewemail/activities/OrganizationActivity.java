@@ -221,7 +221,7 @@ public class OrganizationActivity extends BaseActivity {
 
     private void setMemberListAdd(ArrayList<PersonData> list, PersonData personData) {
         for(PersonData member : list) {
-            if(member.getUserNo() == personData.getUserNo()) {
+            if(member.getmEmail().equals(personData.getmEmail())) {
                 member.setIsCheck(true);
             }
         }
