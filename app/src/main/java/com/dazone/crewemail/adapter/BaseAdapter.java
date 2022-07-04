@@ -1,15 +1,11 @@
 package com.dazone.crewemail.adapter;
 
 import android.app.Activity;
-import android.os.Handler;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.ViewHolder;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
-import com.dazone.crewemail.activities.BaseActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +13,7 @@ import java.util.List;
 /**
  * Created by Harry on 6/7/16.
  */
-public abstract class BaseAdapter<T, V extends ViewHolder> extends RecyclerView.Adapter<V> {
+public abstract class BaseAdapter<T, V extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<V> {
     private int lastPosition = -1;
     protected Activity mActivity;
     protected List<T> list;

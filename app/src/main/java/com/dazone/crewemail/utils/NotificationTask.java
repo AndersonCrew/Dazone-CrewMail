@@ -13,18 +13,16 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.os.PowerManager;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
-import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.FileProvider;
+
 import com.dazone.crewemail.BuildConfig;
 import com.dazone.crewemail.DaZoneApplication;
 import com.dazone.crewemail.R;
-import com.dazone.crewemail.activities.ActivityMailDetail;
-import com.dazone.crewemail.activities.BaseActivity;
 
 import java.io.File;
 import java.io.FileOutputStream;

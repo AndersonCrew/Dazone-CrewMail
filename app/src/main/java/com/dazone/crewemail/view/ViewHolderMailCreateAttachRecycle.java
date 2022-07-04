@@ -1,9 +1,10 @@
-package com.dazone.crewemail.View;
+package com.dazone.crewemail.view;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.dazone.crewemail.R;
 

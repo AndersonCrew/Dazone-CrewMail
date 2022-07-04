@@ -39,7 +39,7 @@
             android:layout_marginTop="@dimen/dimen_50_100"
             />
     <View android:id="@+id/view" android:layout_below="@+id/main" style="@style/border"/>
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:layout_below="@+id/view"
             android:id="@+id/common_recycler_view"
             android:layout_width="match_parent"

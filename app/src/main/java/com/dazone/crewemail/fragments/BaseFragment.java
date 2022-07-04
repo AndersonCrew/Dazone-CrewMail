@@ -11,9 +11,9 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
+
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
 
 /**
  * Created by Sherry on 12/8/15.
@@ -21,6 +21,7 @@ import android.support.v4.content.ContextCompat;
 public class BaseFragment extends Fragment {
     int CAMERA_PERMISSIONS_REQUEST_CODE = 0;
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static String getPath(Context context, Uri uri) {
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
 
@@ -123,12 +124,12 @@ public class BaseFragment extends Fragment {
     public void setPermissionsReadExternalStorage() {
         String[] requestPermission;
         requestPermission = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
-        ActivityCompat.requestPermissions(getActivity(), requestPermission, CAMERA_PERMISSIONS_REQUEST_CODE);
+       // ActivityCompat.requestPermissions(getActivity(), requestPermission, CAMERA_PERMISSIONS_REQUEST_CODE);
     }
     public boolean checkPermissionsReadExternalStorage() {
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        /*if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             return false;
-        }
+        }*/
         return true;
     }
 

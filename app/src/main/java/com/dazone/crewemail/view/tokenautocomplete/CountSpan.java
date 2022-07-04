@@ -1,4 +1,4 @@
-package com.dazone.crewemail.View.tokenautocomplete;
+package com.dazone.crewemail.view.tokenautocomplete;
 
 import android.content.Context;
 import android.util.TypedValue;

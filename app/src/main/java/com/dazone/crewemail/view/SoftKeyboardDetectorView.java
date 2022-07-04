@@ -1,4 +1,4 @@
-package com.dazone.crewemail.View;
+package com.dazone.crewemail.view;
 
 import android.app.Activity;
 import android.content.Context;

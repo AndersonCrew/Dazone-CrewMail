@@ -6,17 +6,8 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.SimpleItemAnimator;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -33,6 +24,15 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.SearchView;
+import androidx.core.view.MenuItemCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.dazone.crewemail.BuildConfig;
 import com.dazone.crewemail.DaZoneApplication;
@@ -51,12 +51,12 @@ import com.dazone.crewemail.data.PersonData;
 import com.dazone.crewemail.database.GetMailListTask;
 import com.dazone.crewemail.event.ReloadListMail;
 import com.dazone.crewemail.event.reloadTitle;
-import com.dazone.crewemail.utils.MailHelper;
 import com.dazone.crewemail.interfaces.BaseHTTPCallBack;
 import com.dazone.crewemail.interfaces.OnGetLocalDataCallback;
 import com.dazone.crewemail.interfaces.OnMailListCallBack;
 import com.dazone.crewemail.interfaces.OnMenuListCallBack;
 import com.dazone.crewemail.utils.EmailBoxStatics;
+import com.dazone.crewemail.utils.MailHelper;
 import com.dazone.crewemail.utils.Prefs;
 import com.dazone.crewemail.utils.Statics;
 import com.dazone.crewemail.utils.StaticsBundle;
@@ -72,13 +72,9 @@ import org.greenrobot.eventbus.Subscribe;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
-
-import static com.dazone.crewemail.webservices.HttpRequest.sRootLink;
 
 
 public class ListEmailFragment extends BaseFragment implements BaseHTTPCallBack, OnGetLocalDataCallback {

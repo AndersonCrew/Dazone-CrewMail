@@ -28,7 +28,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.design.widget.AppBarLayout
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/AppTheme.AppBarOverlay">
@@ -56,9 +56,9 @@
                     android:textColor="@android:color/white" />
             </RelativeLayout>
 
-        </android.support.design.widget.AppBarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
 
-        <android.support.v4.widget.NestedScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -82,7 +82,7 @@
                         android:paddingTop="@dimen/dimen_10_20"
                         tools:imageUrl="@{profile.avatar}" />
 
-                    <com.dazone.crewemail.View.RobotoTextView
+                    <com.dazone.crewemail.view.RobotoTextView
                         android:id="@+id/activity_new_profile_tv_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -92,7 +92,7 @@
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/text_16_dp" />
 
-                    <com.dazone.crewemail.View.RobotoTextView
+                    <com.dazone.crewemail.view.RobotoTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/activity_new_profile_tv_name"
@@ -115,7 +115,7 @@
                     android:padding="@dimen/dimen_10_20"
                     android:visibility="gone">
 
-                    <com.dazone.crewemail.View.RobotoTextView
+                    <com.dazone.crewemail.view.RobotoTextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:text="@string/company_name"
@@ -123,7 +123,7 @@
                         android:textColor="@color/roboto_color"
                         android:textSize="@dimen/text_14_dp" />
 
-                    <com.dazone.crewemail.View.RobotoTextView
+                    <com.dazone.crewemail.view.RobotoTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@{user.companyName}"
@@ -142,7 +142,7 @@
                     android:padding="@dimen/dimen_10_20"
                     android:visibility="gone">
 
-                    <com.dazone.crewemail.View.RobotoTextView
+                    <com.dazone.crewemail.view.RobotoTextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:text="@string/string_company_id"
@@ -150,7 +150,7 @@
                         android:textColor="@color/roboto_color"
                         android:textSize="@dimen/text_14_dp" />
 
-                    <com.dazone.crewemail.View.RobotoTextView
+                    <com.dazone.crewemail.view.RobotoTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@{user.Domain}"
@@ -167,7 +167,7 @@
                     android:padding="@dimen/dimen_10_20"
                     android:visibility="gone">
 
-                    <com.dazone.crewemail.View.RobotoTextView
+                    <com.dazone.crewemail.view.RobotoTextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:text="@string/personal_id"
@@ -175,7 +175,7 @@
                         android:textColor="@color/roboto_color"
                         android:textSize="@dimen/text_14_dp" />
 
-                    <com.dazone.crewemail.View.RobotoTextView
+                    <com.dazone.crewemail.view.RobotoTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@{profile.userId}"
@@ -192,7 +192,7 @@
                     android:layout_height="wrap_content"
                     android:padding="@dimen/dimen_10_20">
 
-                    <com.dazone.crewemail.View.RobotoTextView
+                    <com.dazone.crewemail.view.RobotoTextView
                         android:id="@+id/activity_new_profile_tv_pass"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -201,7 +201,7 @@
                         android:textColor="@color/roboto_color"
                         android:textSize="@dimen/text_14_dp" />
 
-                    <com.dazone.crewemail.View.RobotoTextView
+                    <com.dazone.crewemail.view.RobotoTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/activity_new_profile_tv_pass"
@@ -212,7 +212,7 @@
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_16_dp" />
 
-                    <com.dazone.crewemail.View.RobotoTextView
+                    <com.dazone.crewemail.view.RobotoTextView
                         android:id="@+id/btnChange"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -236,7 +236,7 @@
                     android:layout_height="wrap_content"
                     android:padding="@dimen/dimen_10_20">
 
-                    <com.dazone.crewemail.View.RobotoTextView
+                    <com.dazone.crewemail.view.RobotoTextView
                         android:id="@+id/activity_new_profile_tv_email"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -245,7 +245,7 @@
                         android:textColor="@color/roboto_color"
                         android:textSize="@dimen/text_14_dp" />
 
-                    <com.dazone.crewemail.View.RobotoTextView
+                    <com.dazone.crewemail.view.RobotoTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/activity_new_profile_tv_email"
@@ -271,7 +271,7 @@
                     android:layout_height="wrap_content"
                     android:padding="@dimen/dimen_10_20">
 
-                    <com.dazone.crewemail.View.RobotoTextView
+                    <com.dazone.crewemail.view.RobotoTextView
                         android:id="@+id/activity_new_profile_tv_phone"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -280,7 +280,7 @@
                         android:textColor="@color/roboto_color"
                         android:textSize="@dimen/text_14_dp" />
 
-                    <com.dazone.crewemail.View.RobotoTextView
+                    <com.dazone.crewemail.view.RobotoTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/activity_new_profile_tv_phone"
@@ -321,7 +321,7 @@
                     android:layout_height="wrap_content"
                     android:padding="@dimen/dimen_10_20">
 
-                    <com.dazone.crewemail.View.RobotoTextView
+                    <com.dazone.crewemail.view.RobotoTextView
                         android:id="@+id/tv_company_contact"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -330,7 +330,7 @@
                         android:textColor="@color/roboto_color"
                         android:textSize="@dimen/text_14_dp" />
 
-                    <com.dazone.crewemail.View.RobotoTextView
+                    <com.dazone.crewemail.view.RobotoTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/tv_company_contact"
@@ -356,7 +356,7 @@
                         android:layout_height="wrap_content"
                         android:padding="@dimen/dimen_10_20">
 
-                        <com.dazone.crewemail.View.RobotoTextView
+                        <com.dazone.crewemail.view.RobotoTextView
                             android:id="@+id/tv_date_start"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
@@ -365,7 +365,7 @@
                             android:textColor="@color/roboto_color"
                             android:textSize="@dimen/text_14_dp" />
 
-                        <com.dazone.crewemail.View.RobotoTextView
+                        <com.dazone.crewemail.view.RobotoTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/tv_date_start"
@@ -390,7 +390,7 @@
                         android:layout_height="wrap_content"
                         android:padding="@dimen/dimen_10_20">
 
-                        <com.dazone.crewemail.View.RobotoTextView
+                        <com.dazone.crewemail.view.RobotoTextView
                             android:id="@+id/tv_date_of_birth"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
@@ -399,7 +399,7 @@
                             android:textColor="@color/roboto_color"
                             android:textSize="@dimen/text_14_dp" />
 
-                        <com.dazone.crewemail.View.RobotoTextView
+                        <com.dazone.crewemail.view.RobotoTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/tv_date_of_birth"
@@ -414,7 +414,7 @@
                 </LinearLayout>
             </LinearLayout>
 
-        </android.support.v4.widget.NestedScrollView>
+        </androidx.core.widget.NestedScrollView>
 
 
     </LinearLayout>

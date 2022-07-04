@@ -9,8 +9,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.NotificationManagerCompat;
-import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -24,9 +22,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
+
 import com.dazone.crewemail.DaZoneApplication;
 import com.dazone.crewemail.R;
-import com.dazone.crewemail.View.SoftKeyboardDetectorView;
 import com.dazone.crewemail.customviews.AlertDialogView;
 import com.dazone.crewemail.data.ErrorData;
 import com.dazone.crewemail.data.PersonData;
@@ -41,6 +41,7 @@ import com.dazone.crewemail.utils.PreferenceUtilities;
 import com.dazone.crewemail.utils.Prefs;
 import com.dazone.crewemail.utils.Statics;
 import com.dazone.crewemail.utils.Util;
+import com.dazone.crewemail.view.SoftKeyboardDetectorView;
 import com.dazone.crewemail.webservices.HttpRequest;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -410,7 +411,7 @@ public class LoginActivity extends BaseActivity implements OnCheckDevice, BaseHT
                                 error_msg = getString(R.string.connection_falsed);
                             }
 
-                            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(LoginActivity.this);
+                            AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
                             builder.setMessage(error_msg).setPositiveButton("OK", null);
                             builder.create().show();
                         }

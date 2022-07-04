@@ -5,15 +5,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+import androidx.appcompat.app.AlertDialog;
 
 import com.dazone.crewemail.BuildConfig;
 import com.dazone.crewemail.DaZoneApplication;
@@ -21,7 +20,6 @@ import com.dazone.crewemail.R;
 import com.dazone.crewemail.activities.setting.GeneralSettingActivity;
 import com.dazone.crewemail.activities.setting.NotificationSettingActivity;
 import com.dazone.crewemail.activities.setting.SettingActivity;
-import com.dazone.crewemail.customviews.AlertDialogView;
 import com.dazone.crewemail.data.ErrorData;
 import com.dazone.crewemail.data.MailProfileData;
 import com.dazone.crewemail.data.UserData;

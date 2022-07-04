@@ -1,4 +1,4 @@
-package com.dazone.crewemail.View.tokenautocomplete;
+package com.dazone.crewemail.view.tokenautocomplete;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -8,7 +8,6 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -40,6 +39,8 @@ import android.widget.Filter;
 import android.widget.ListView;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import com.dazone.crewemail.DaZoneApplication;
 import com.dazone.crewemail.event.CompleteTextView;
@@ -325,7 +326,7 @@ public abstract class TokenCompleteTextView<T> extends MultiAutoCompleteTextView
 
     /**
      * <p>You can get a color integer either using
-     * {@link android.support.v4.content.ContextCompat#getColor(android.content.Context, int)}
+     * {@link androidx.core.content.ContextCompat#getColor(android.content.Context, int)}
      * or with {@link android.graphics.Color#parseColor(String)}.</p>
      * <p>{@link android.graphics.Color#parseColor(String)}
      * accepts these formats (copied from android.graphics.Color):

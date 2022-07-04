@@ -9,21 +9,65 @@
         <entry key="app/src/main/res/drawable/color_background_mail_bcc_cc.xml" value="0.15416666666666667" />
         <entry key="app/src/main/res/drawable/color_background_mail_to.xml" value="0.3765625" />
         <entry key="app/src/main/res/drawable/color_background_mail_unknown.xml" value="0.3765625" />
+        <entry key="app/src/main/res/drawable/ic_group.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_change_pass.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/activity_external_function.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/activity_intro.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.36041666666666666" />
+        <entry key="app/src/main/res/layout/activity_new_profile.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/activity_note_profile.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_organization.xml" value="0.36041666666666666" />
+        <entry key="app/src/main/res/layout/activity_pin.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/activity_setting_general.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_setting_notification.xml" value="0.36041666666666666" />
+        <entry key="app/src/main/res/layout/activity_sign_up.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/common_recycler_view.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/custom_dialog.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/custom_dialog_auto_login.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/custom_dialog_confirm_draft_mail.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/dialog_message.xml" value="0.2" />
         <entry key="app/src/main/res/layout/fragment_company_renew.xml" value="0.36041666666666666" />
+        <entry key="app/src/main/res/layout/fragment_contact.xml" value="0.2" />
         <entry key="app/src/main/res/layout/fragment_mail_create.xml" value="0.36041666666666666" />
+        <entry key="app/src/main/res/layout/fragment_mail_create_item_attach.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/fragment_mail_create_item_spiner_address_to.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/fragment_mail_create_person.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/fragment_mail_create_spiner_txt_single_devider.xml" value="0.2" />
         <entry key="app/src/main/res/layout/fragment_mail_detail.xml" value="0.36041666666666666" />
+        <entry key="app/src/main/res/layout/fragment_move_mail_box.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/fragment_organization.xml" value="0.2" />
         <entry key="app/src/main/res/layout/fragment_search_renew.xml" value="0.36041666666666666" />
+        <entry key="app/src/main/res/layout/item_contact.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/item_mail.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/item_mail_new.xml" value="0.2" />
         <entry key="app/src/main/res/layout/item_member.xml" value="0.36041666666666666" />
+        <entry key="app/src/main/res/layout/item_nav_menu.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/item_nav_menu_new.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/item_organization.xml" value="0.2" />
         <entry key="app/src/main/res/layout/item_organization_company.xml" value="0.36041666666666666" />
+        <entry key="app/src/main/res/layout/layout_loading_item.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/layout_myinfor.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/layout_temp.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/layout_view_line.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/load_fail_layout.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/loading_layout.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/logo.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/mail_list_month_item.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/nav_header_main.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/new_organization_chart_layout.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/person_layout.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/progress_item.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/recycle_read_date.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/row_organization_chart_layout.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/tag.xml" value="0.2" />
         <entry key="app/src/main/res/menu/mail_create_menu.xml" value="0.36041666666666666" />
       </map>
     </option>
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="11" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

@@ -1,7 +1,7 @@
 package com.dazone.crewemail.interfaces;
 
 
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 
 /**
  * Created by Sherry on 10/19/15.

@@ -1,5 +1,7 @@
 package com.dazone.crewemail.activities;
 
+import static com.dazone.crewemail.utils.Util.compareVersionNames;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -13,23 +15,22 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+
+import com.dazone.crewemail.BuildConfig;
 import com.dazone.crewemail.DaZoneApplication;
 import com.dazone.crewemail.R;
 import com.dazone.crewemail.activities.setting.PinActivity;
 import com.dazone.crewemail.data.PersonData;
 import com.dazone.crewemail.data.UserData;
 import com.dazone.crewemail.database.DataManager;
-import com.dazone.crewemail.database.OrganizationUserDBHelper;
-import com.dazone.crewemail.database.ServerSiteDBHelper;
 import com.dazone.crewemail.event.PinEvent;
-import com.dazone.crewemail.utils.Constants;
 import com.dazone.crewemail.utils.Prefs;
 import com.dazone.crewemail.utils.Statics;
 import com.dazone.crewemail.utils.StaticsBundle;
@@ -49,10 +50,6 @@ import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import com.dazone.crewemail.BuildConfig;
-
-import static com.dazone.crewemail.utils.Util.compareVersionNames;
-import static com.dazone.crewemail.webservices.HttpRequest.sRootLink;
 
 public class IntroActivity extends BaseActivity {
 

@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dazone.crewemail.R;
-import com.dazone.crewemail.View.tokenautocomplete.TokenCompleteTextView;
+import com.dazone.crewemail.view.tokenautocomplete.TokenCompleteTextView;
 import com.dazone.crewemail.data.PersonData;
 import com.dazone.crewemail.utils.MailHelper;
 

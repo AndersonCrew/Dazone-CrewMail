@@ -2,10 +2,6 @@ package com.dazone.crewemail.fragments;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SimpleItemAnimator;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,6 +10,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import com.dazone.crewemail.R;
 import com.dazone.crewemail.adapter.ListReadDateAdapter;
@@ -121,7 +122,7 @@ public class ReadDateFragment extends BaseFragment {
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLinearLayoutManager);
-        mAdapter = new ListReadDateAdapter(ReadDateFragment.this, receiveData.getList());
+        mAdapter = new ListReadDateAdapter(this, receiveData.getList());
         recyclerView.setAdapter(mAdapter);
         // remove default animation
         RecyclerView.ItemAnimator animator = recyclerView.getItemAnimator();

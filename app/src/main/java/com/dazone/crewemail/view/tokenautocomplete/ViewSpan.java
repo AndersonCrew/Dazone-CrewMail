@@ -1,11 +1,12 @@
-package com.dazone.crewemail.View.tokenautocomplete;
+package com.dazone.crewemail.view.tokenautocomplete;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.support.annotation.NonNull;
 import android.text.style.ReplacementSpan;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
 
 
 public class ViewSpan extends ReplacementSpan {

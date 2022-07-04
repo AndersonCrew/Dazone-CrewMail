@@ -40,8 +40,8 @@ import com.dazone.crewemail.DaZoneApplication;
 import com.dazone.crewemail.R;
 import com.dazone.crewemail.Service.UploadFileToServer;
 import com.dazone.crewemail.Service.fileUploadDownload;
-import com.dazone.crewemail.View.tokenautocomplete.FilteredArrayAdapter;
-import com.dazone.crewemail.View.tokenautocomplete.TokenCompleteTextView;
+import com.dazone.crewemail.view.tokenautocomplete.FilteredArrayAdapter;
+import com.dazone.crewemail.view.tokenautocomplete.TokenCompleteTextView;
 import com.dazone.crewemail.activities.ActivityMailCreate;
 import com.dazone.crewemail.activities.ContactActivity;
 import com.dazone.crewemail.activities.ListEmailActivity;
@@ -88,9 +88,7 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.Nullable;
 

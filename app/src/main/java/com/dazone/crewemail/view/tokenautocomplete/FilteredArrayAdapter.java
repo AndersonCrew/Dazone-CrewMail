@@ -1,9 +1,10 @@
-package com.dazone.crewemail.View.tokenautocomplete;
+package com.dazone.crewemail.view.tokenautocomplete;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
+
+import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -78,7 +79,7 @@ abstract public class FilteredArrayAdapter<T> extends ArrayAdapter<T> {
         this.originalObjects = objects;
     }
 
-    @NonNull 
+    @NonNull
     @Override
     public Filter getFilter() {
         if (filter == null)

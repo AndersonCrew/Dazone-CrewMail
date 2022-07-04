@@ -1,7 +1,7 @@
 package com.dazone.crewemail.data;
 
 import android.content.Context;
-import android.databinding.BaseObservable;
+import androidx.databinding.BaseObservable;
 import android.text.TextUtils;
 import android.util.Log;
 

@@ -2,7 +2,6 @@ package com.dazone.crewemail.activities.setting;
 
 import android.app.TimePickerDialog;
 import android.os.Bundle;
-import android.support.v7.widget.SwitchCompat;
 import android.text.Html;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -10,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import androidx.appcompat.widget.SwitchCompat;
 
 import com.dazone.crewemail.R;
 import com.dazone.crewemail.activities.BaseActivity;

@@ -1,9 +1,8 @@
 package com.dazone.crewemail.activities;
 
-import android.databinding.DataBindingUtil;
+import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.Toast;
 
 import com.dazone.crewemail.R;

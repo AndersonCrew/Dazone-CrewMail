@@ -1,13 +1,15 @@
-package com.dazone.crewemail.View;
+package com.dazone.crewemail.view;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.support.v4.util.LruCache;
 import android.util.AttributeSet;
+import android.util.LruCache;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.AppCompatTextView;
 
-public class RobotoTextView extends TextView {
+
+public class RobotoTextView extends AppCompatTextView {
 
     private final static String NAME = "Regular";
     private static LruCache<String, Typeface> sTypefaceCache = new LruCache<>(12);

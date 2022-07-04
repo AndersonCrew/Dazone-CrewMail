@@ -3,9 +3,9 @@ package com.dazone.crewemail;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
-import android.support.multidex.MultiDex;
 import android.text.TextUtils;
-import android.widget.Toast;
+
+import androidx.multidex.MultiDex;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -34,8 +34,6 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import io.fabric.sdk.android.Fabric;
-/*import io.realm.Realm;
-import io.realm.RealmConfiguration;*/
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;

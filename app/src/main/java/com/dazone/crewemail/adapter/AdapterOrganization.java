@@ -1,14 +1,12 @@
 package com.dazone.crewemail.adapter;
 
-import static com.dazone.crewemail.webservices.HttpRequest.sRootLink;
-
-import android.os.Handler;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.dazone.crewemail.R;
 import com.dazone.crewemail.data.PersonData;
@@ -23,8 +21,6 @@ public class AdapterOrganization extends RecyclerView.Adapter<AdapterOrganizatio
         list.clear();
         list.addAll(listData);
     }
-
-
 
     @Override
     public OrganizationViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {

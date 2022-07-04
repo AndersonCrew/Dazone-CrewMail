@@ -1,8 +1,6 @@
 package com.dazone.crewemail.customviews;
 
 import android.app.Activity;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -11,14 +9,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
 import com.dazone.crewemail.DaZoneApplication;
 import com.dazone.crewemail.R;
 import com.dazone.crewemail.data.ErrorData;
 import com.dazone.crewemail.data.MailBoxMenuData;
 import com.dazone.crewemail.data.MailTagMenuData;
-import com.dazone.crewemail.utils.MailHelper;
 import com.dazone.crewemail.interfaces.OnMenuListCallBack;
 import com.dazone.crewemail.utils.EmailBoxStatics;
+import com.dazone.crewemail.utils.MailHelper;
 import com.dazone.crewemail.utils.Prefs;
 import com.dazone.crewemail.utils.Statics;
 import com.dazone.crewemail.utils.StaticsBundle;

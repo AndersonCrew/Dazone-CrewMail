@@ -1,7 +1,7 @@
 package com.dazone.crewemail.viewmodel;
 
 import android.content.Context;
-import android.databinding.BaseObservable;
+import androidx.databinding.BaseObservable;
 
 import com.dazone.crewemail.data.MailProfileData;
 
